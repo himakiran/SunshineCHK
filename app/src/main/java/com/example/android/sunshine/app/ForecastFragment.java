@@ -95,7 +95,8 @@ public class ForecastFragment extends Fragment {
         //code to handle each menu item
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-
+            FetchWeatherTask fetch = new FetchWeatherTask();
+            fetch.execute();
             return true;
         }
 
@@ -123,7 +124,7 @@ public class ForecastFragment extends Fragment {
                 // Construct the URL for the OpenWeatherMap query
                 // Possible parameters are available at OWM's forecast API page, at
                 // http://openweathermap.org/API#forecast
-                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7");
+                URL url = new URL("http://api.openweathermap.org/data/2.5/forecast/daily?q=94043&mode=json&units=metric&cnt=7&appid=43015412ed029d0518c54689fa3c3a37");
 
                 // Create the request to OpenWeatherMap, and open the connection
                 urlConnection = (HttpURLConnection) url.openConnection();
@@ -169,6 +170,7 @@ public class ForecastFragment extends Fragment {
                     }
                 }
             }
+            Log.v("CHKInternet :", forecastJsonStr);
             return forecastJsonStr;
         }
 
