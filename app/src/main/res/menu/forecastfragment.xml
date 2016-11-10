@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/menu_forecast">
     <item android:id="@+id/action_refresh"
-        android:title="Refresh"
-        android:showAsAction="ifRoom"
-        tools:ignore="AppCompatResource" />
+        android:title="@string/action_refresh"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/help"
+        android:title="@string/help" />
 
     </menu>

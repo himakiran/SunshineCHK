@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">Sunshine</string>
     <string name="hello_world">Hello World !</string>
+    <string name="action_refresh" translatable="false">Refresh</string>
+    <string name="help">Help</string>
+
+
 </resources>
