@@ -4,6 +4,7 @@ package com.example.android.sunshine.app;
  * Created by userhk on 07/11/16.
  */
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -80,6 +82,19 @@ public class ForecastFragment extends Fragment {
             */
         ListView listview = (ListView) rootView.findViewById(R.id.list_view_forecast);
         listview.setAdapter(mForecastAdapter);
+         /*
+        The below code from the gist of the class to replace the toast in MainActivity.java has been
+        included here ..the gist of the class does not require toast_layout.xml
+        */
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+                String forecast = mForecastAdapter.getItem(position);
+                Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
+                startActivity(intent);
+            }
+        });
 
 
         return rootView;

@@ -3,12 +3,6 @@ package com.example.android.sunshine.app;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -41,37 +35,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /*
-    showToast should always be in MainActivity and not in fragments.
-     */
+    Explicit intent to start DetailActivity ..Replaced toast with starting DetailActivity
+
     public void showToast(View view) {
 
-        /*
-        The below code does not work in fragment..
-        LayoutInflater inflater = getLayoutInflater();
-         */
+        Intent detailIntent = new Intent(this, DetailActivity.class);
 
-        LayoutInflater inflater = getLayoutInflater();
-        /*
-        In the code below toast_layout is the name of the custom toast layout file in layout dir.
-        forecast_toast_container is the id of linearlayout element in the above file.
-         */
-        View layout = inflater.inflate(R.layout.toast_layout,
-                (ViewGroup) view.findViewById(R.id.forecast_toast_container));
+        startService(detailIntent);
+    } */
 
-        TextView toastText = (TextView) layout.findViewById(R.id.toast_text);
-        // below code extracts the text of the item calling the toast function
-        String str = ((TextView) view).getText().toString();
-        toastText.setText(str);
-        toastText.setTextSize(24);
-        /*
-        In fragments you  should use getActivity() and in mainactivty getApplicationContext()
-         */
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(layout);
-        toast.show();
-    }
+    /*
+    code from the gist of the class to replace the above has been included in ForecastFragment.java
+    the gist of the class does not require toast_layout.xml
+     */
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
