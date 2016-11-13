@@ -32,6 +32,7 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
+import static com.example.android.sunshine.app.R.id.list_item_forecast_textview;
 import static com.example.android.sunshine.app.R.layout.fragment_main;
 
 /**
@@ -68,7 +69,7 @@ public class ForecastFragment extends Fragment {
             correctly filled in list_item_forecast_textview which is part of list_item_forecast layout
 
             */
-        mForecastAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.list_item_forecast, R.id.list_item_forecast_textview, dailyWeatherUpdate);
+        mForecastAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.list_item_forecast, list_item_forecast_textview, dailyWeatherUpdate);
         FetchWeatherTask fetch = new FetchWeatherTask();
         //fetch takes one parameter that is a string
         // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
@@ -108,6 +109,7 @@ public class ForecastFragment extends Fragment {
 
         return super.onOptionsItemSelected(item);
     }
+
 
     // to fetch data from external source
     public class FetchWeatherTask extends AsyncTask<String, String, String[]> {
@@ -309,6 +311,8 @@ public class ForecastFragment extends Fragment {
         @Override
         protected void onPostExecute(String[] strings) {
             super.onPostExecute(strings);
+            // clear previous values
+            mForecastAdapter.clear();
 
             // populate with fresh values
             for (String s : strings)
