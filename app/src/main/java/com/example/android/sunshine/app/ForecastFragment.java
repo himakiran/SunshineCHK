@@ -91,6 +91,10 @@ public class ForecastFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String forecast = mForecastAdapter.getItem(position);
+                /*
+                The code below illustrates making a new intent, declaring the second activity to open
+                ie DetailActivity and then pass a string parameter ie forecast.
+                 */
                 Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
                 startActivity(intent);
             }
