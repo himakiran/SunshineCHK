@@ -125,6 +125,16 @@ public class ForecastFragment extends Fragment {
             fetch.execute("94303");
             return true;
         }
+        /*
+        The code below calls the setting activity class
+         */
+        if (id == R.id.settings) {
+            Intent intent = new Intent(getActivity(), SettingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
+
+            return true;
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -229,9 +239,9 @@ public class ForecastFragment extends Fragment {
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
 
-            for (String s : resultStrs) {
+            /*for (String s : resultStrs) {
                 Log.v("CHK-TAG", "Forecast entry: " + s);
-            }
+            }*/
             return resultStrs;
 
         }
@@ -272,7 +282,7 @@ public class ForecastFragment extends Fragment {
 
                 // Create the request to OpenWeatherMap, and open the connection
                 URL url = new URL(weatherURL.build().toString());
-                //Log.v("CHK-URL",url.toString());
+                Log.v("CHK-URL", url.toString());
                 urlConnection = (HttpURLConnection) url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();

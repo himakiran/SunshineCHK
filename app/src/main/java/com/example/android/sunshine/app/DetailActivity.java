@@ -62,7 +62,16 @@ public class DetailActivity extends AppCompatActivity {
         if (id == R.id.detail_action_refresh) {
             return true;
         }
+        /*
+        The code below calls the setting activity class
+         */
+        if (id == R.id.detail_settings) {
+            Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(intent);
 
+            return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -87,6 +96,7 @@ public class DetailActivity extends AppCompatActivity {
             /*
             And this is how we set the text of any textview
              */
+
             TextView textView = (TextView) rootView.findViewById(R.id.detail_text);
             textView.setText(weather);
             return rootView;
