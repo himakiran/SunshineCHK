@@ -7,6 +7,9 @@
     <string name="action_settings">Settings</string>
     <string name="pref_sync">Eg-pref</string>
     <string name="pref_sync_summ">Eg-pref-Summary</string>
+    <string name="pref_location_label">Location</string>
+    <string name="pref_location_key" translatable="false">location</string>
+    <string name="pref_location_default" translatable="false">94303</string>
 
 
 </resources>
