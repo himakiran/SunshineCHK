@@ -23,17 +23,22 @@ public class SettingsActivity extends PreferenceActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // Add 'general' preferences, defined in the XML file
-        // TODO: Add preferences from XML
+
         /*
         The code below calls the settings layout by calling preferences.xml from xml dir
-        this is similar to how a lyout file is called by inflater.
+        this is similar to how a layout file is called by inflater.
          */
         addPreferencesFromResource(preferences);
+        /*
+            This code updates the value of the pref_location_key when it is updated by user
+            from editTextPreference.
+         */
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)) );
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.
-        // TODO: Add preferences
+
+
     }
 
     /**
