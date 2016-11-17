@@ -5,9 +5,11 @@ package com.example.android.sunshine.app;
  */
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.text.format.Time;
 import android.util.Log;
@@ -123,6 +125,12 @@ public class ForecastFragment extends Fragment {
             //fetch takes one parameter that is a string
             // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
             fetch.execute("94303");
+            try {
+                String zipcode = getzipcode();
+                Log.v("CHK-ZIPCODE-FUNCTION", zipcode);
+            } catch (Exception e) {
+                Log.e("CHK-ZIPCODE-FUNCTION", "String not returned", e);
+            }
             return true;
         }
         /*
@@ -139,6 +147,14 @@ public class ForecastFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private String getzipcode() {
+        /*
+        The code below gets the saved preference in edittextprefernce
+         */
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+        return prefs.getString("location", "94303");
+
+    }
 
     // to fetch data from external source
     public class FetchWeatherTask extends AsyncTask<String, String, String[]> {
