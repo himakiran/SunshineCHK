@@ -7,6 +7,9 @@
     <item
         android:id="@+id/settings"
         android:title="@string/action_settings" />
+    <item
+        android:id="@+id/see_map"
+        android:title="View Location" />
 
 
 </menu>

@@ -43,8 +43,11 @@ import static com.example.android.sunshine.app.R.layout.fragment_main;
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment {
+    public double geoLat;
+    public double geoLong;
     // mForecastAdapter has been made a global variable so that it can be accessed from within FetchWeatherTask
     private ArrayAdapter<String> mForecastAdapter;
+
     public ForecastFragment() {
     }
 
@@ -145,6 +148,21 @@ public class ForecastFragment extends Fragment {
 
             return true;
         }
+        /*
+        This is an example of implicit intent which helps view the location on google map
+         */
+        if (id == R.id.see_map) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            String geo = "geo:" + Double.valueOf(geoLat) + "," + Double.valueOf(geoLong);
+            Uri geolocation = Uri.parse(geo);
+            Log.v("CHK-GEO-URI", geo);
+            //intent.setData takes an Uri and hence above Uri.parse on string is done
+            intent.setData(geolocation);
+            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+                startActivity(intent);
+            }
+
+        }
 
         return super.onOptionsItemSelected(item);
     }
@@ -215,6 +233,7 @@ public class ForecastFragment extends Fragment {
             return highLowStr;
         }
 
+
         /**
          * Take the String representing the complete forecast in JSON Format and
          * pull out the data we need to construct the Strings needed for the wireframes.
@@ -234,6 +253,8 @@ public class ForecastFragment extends Fragment {
             final String OWM_DESCRIPTION = "main";
 
             JSONObject forecastJson = new JSONObject(forecastJsonStr);
+
+
             JSONArray weatherArray = forecastJson.getJSONArray(OWM_LIST);
 
             // OWM returns daily forecasts based upon the local time of the city that is being
@@ -384,6 +405,22 @@ public class ForecastFragment extends Fragment {
                 }
             }
             //Log.v("CHKInternet :", forecastJsonStr);
+            /*
+            The below code extracts lat long and stores it in the var geoLat and geoLong
+             */
+            try {
+                JSONObject forecastJson = new JSONObject(forecastJsonStr);
+                JSONObject cityJson = forecastJson.getJSONObject("city");
+                JSONObject latLongJ = cityJson.getJSONObject("coord");
+                geoLat = latLongJ.getDouble("lat");
+                geoLong = latLongJ.getDouble("lon");
+                //long[] latLongArray = {lat,lonG};
+                //Log.v("CHK-MAP", Arrays.toString(latLongArray));
+            } catch (JSONException j) {
+                Log.e("CHK-JSON-ISSUE", "json-object", j);
+            }
+
+
 
             try {
                 return getWeatherDataFromJson(forecastJsonStr, Integer.parseInt(numOfDays));
