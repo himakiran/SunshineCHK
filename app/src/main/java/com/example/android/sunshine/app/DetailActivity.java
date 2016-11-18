@@ -60,6 +60,7 @@ public class DetailActivity extends AppCompatActivity {
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.detail_action_refresh) {
+
             return true;
         }
         /*

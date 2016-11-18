@@ -77,7 +77,7 @@ public class ForecastFragment extends Fragment {
         FetchWeatherTask fetch = new FetchWeatherTask();
         //fetch takes one parameter that is a string
         // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
-        fetch.execute("94303");
+        fetch.execute(getzipcode());
             /*
             the code below loads the fragment_main.xml layout which has the id listview_forecast
             and connects the adapter to it...
@@ -124,10 +124,10 @@ public class ForecastFragment extends Fragment {
             FetchWeatherTask fetch = new FetchWeatherTask();
             //fetch takes one parameter that is a string
             // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
-            fetch.execute("94303");
+
             try {
-                String zipcode = getzipcode();
-                Log.v("CHK-ZIPCODE-FUNCTION", zipcode);
+                fetch.execute(getzipcode());
+                //Log.v("CHK-ZIPCODE-FUNCTION", zipcode);
             } catch (Exception e) {
                 Log.e("CHK-ZIPCODE-FUNCTION", "String not returned", e);
             }
