@@ -47,7 +47,7 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.detail, menu);
+        getMenuInflater().inflate(R.menu.forecastfragment, menu);
         return true;
     }
 
@@ -59,14 +59,17 @@ public class DetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.detail_action_refresh) {
+        if (id == R.id.action_refresh) {
+            Intent intent = new Intent(this, ForecastFragment.class);
+            intent.putExtra("menu", "onOptionsItemSelected");//goes to previous Intent
+            startActivity(intent);
 
             return true;
         }
         /*
         The code below calls the setting activity class
          */
-        if (id == R.id.detail_settings) {
+        if (id == R.id.settings) {
             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);

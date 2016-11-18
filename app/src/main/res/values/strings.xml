@@ -10,6 +10,9 @@
     <string name="pref_location_label">Location</string>
     <string name="pref_location_key" translatable="false">location</string>
     <string name="pref_location_default" translatable="false">94303</string>
-
+    <string name="pref_temp">temperature</string>
+    <string name="pref_temp_title">PICK YOUR UNITS</string>
+    <string name="metric">METRIC</string>
+    <string name="imperial">IMPERIAL</string>
 
 </resources>

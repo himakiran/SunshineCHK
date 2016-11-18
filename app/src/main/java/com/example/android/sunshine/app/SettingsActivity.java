@@ -33,7 +33,8 @@ public class SettingsActivity extends PreferenceActivity
             This code updates the value of the pref_location_key when it is updated by user
             from editTextPreference.
          */
-        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)) );
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_location_key)));
+        bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_temp)));
 
         // For all preferences, attach an OnPreferenceChangeListener so the UI summary can be
         // updated when the preference changes.

@@ -7,4 +7,14 @@
         android:key="@string/pref_location_key"
         android:singleLine="true"
         android:title="@string/pref_location_label" />
+    <ListPreference
+
+        android:defaultValue="@string/metric"
+        android:dialogTitle="@string/pref_temp_title"
+        android:entries="@array/pref_temp_entries"
+        android:entryValues="@array/pref_temp_entry_values"
+        android:key="@string/pref_temp"
+        android:summary="@string/imperial"
+        android:title="@string/pref_temp_title" />
+
 </PreferenceScreen>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="pref_temp_entries">
+        <item>@string/metric</item>
+        <item>@string/imperial</item>
+
+    </string-array>
+    <string-array name="pref_temp_entry_values">
+        <item>1</item>
+        <item>0</item>
+    </string-array>
+
+</resources>

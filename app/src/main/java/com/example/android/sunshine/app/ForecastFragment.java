@@ -116,21 +116,23 @@ public class ForecastFragment extends Fragment {
 
     }
 
+    /*
+    This code ensures that the weather data displayed is always refreshed whenever the app
+    is opened
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
+        updateWeather();
+
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         //code to handle each menu item
         int id = item.getItemId();
         if (id == R.id.action_refresh) {
-            FetchWeatherTask fetch = new FetchWeatherTask();
-            //fetch takes one parameter that is a string
-            // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
-
-            try {
-                fetch.execute(getzipcode());
-                //Log.v("CHK-ZIPCODE-FUNCTION", zipcode);
-            } catch (Exception e) {
-                Log.e("CHK-ZIPCODE-FUNCTION", "String not returned", e);
-            }
+            updateWeather();
             return true;
         }
         /*
@@ -147,12 +149,40 @@ public class ForecastFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
+    private void updateWeather() {
+        FetchWeatherTask fetch = new FetchWeatherTask();
+        //fetch takes one parameter that is a string
+        // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
+
+        try {
+            fetch.execute(getzipcode());
+            //Log.v("CHK-ZIPCODE-FUNCTION", zipcode);
+        } catch (Exception e) {
+            Log.e("CHK-ZIPCODE-FUNCTION", "String not returned", e);
+        }
+    }
+
+    /*
+    This code makes use of sharedPrefernces to receive menu data from preferences
+     */
     private String getzipcode() {
         /*
         The code below gets the saved preference in edittextprefernce
          */
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
         return prefs.getString("location", "94303");
+
+    }
+
+    /*
+    This code gets us the user seleted value of the temperature option. if user selects imperial
+    the function returns 0 and metric 1.
+     */
+    private String getImperialOrMetric() {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
+
+        return prefs.getString("temperature", "true");
+
 
     }
 
@@ -251,6 +281,16 @@ public class ForecastFragment extends Fragment {
                 double high = temperatureObject.getDouble(OWM_MAX);
                 double low = temperatureObject.getDouble(OWM_MIN);
 
+                try {
+                    if (getImperialOrMetric().equals("0")) {
+                        high = (high * 1.8) + 32;
+                        low = (low * 1.8) + 32;
+                    } else
+                        Log.e("CHK-PREFS-TEST", getImperialOrMetric());
+                } catch (Exception e) {
+                    Log.e("CHK-PREFS-TEST", "IF-DID-NOT-EXEC", e);
+                }
+
                 highAndLow = formatHighLows(high, low);
                 resultStrs[i] = day + " - " + description + " - " + highAndLow;
             }
@@ -258,6 +298,7 @@ public class ForecastFragment extends Fragment {
             /*for (String s : resultStrs) {
                 Log.v("CHK-TAG", "Forecast entry: " + s);
             }*/
+
             return resultStrs;
 
         }
