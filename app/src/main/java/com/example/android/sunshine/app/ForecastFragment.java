@@ -45,6 +45,7 @@ import static com.example.android.sunshine.app.R.layout.fragment_main;
 public class ForecastFragment extends Fragment {
     public double geoLat;
     public double geoLong;
+    public Uri geolocation;
     // mForecastAdapter has been made a global variable so that it can be accessed from within FetchWeatherTask
     private ArrayAdapter<String> mForecastAdapter;
 
@@ -97,10 +98,21 @@ public class ForecastFragment extends Fragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                 String forecast = mForecastAdapter.getItem(position);
                 /*
-                The code below illustrates making a new intent, declaring the second activity to open
-                ie DetailActivity and then pass a string parameter ie forecast.
+                The below code takes geoLat and geoLong from the doInBackground() and sets the
+                Uri geolocation.
                  */
+                String geo = "geo:" + Double.valueOf(geoLat) + "," + Double.valueOf(geoLong);
+                geolocation = Uri.parse(geo);
+                /*
+                The code below illustrates making a new intent, declaring the second activity to open
+                ie DetailActivity and then pass a string parameter ie forecast. which will be used
+                by the onCreateView() in detailActivity to set the weataher string.
+                It also passes geo which shall be used by the if (id == R.id.detail_see_map)
+                function in detailActivity to set the Uri.
+                 */
+
                 Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
+                intent.putExtra("GEO-TEXT", geo);
                 startActivity(intent);
             }
         });
@@ -153,14 +165,15 @@ public class ForecastFragment extends Fragment {
          */
         if (id == R.id.see_map) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            String geo = "geo:" + Double.valueOf(geoLat) + "," + Double.valueOf(geoLong);
-            Uri geolocation = Uri.parse(geo);
-            Log.v("CHK-GEO-URI", geo);
+
+
+            //Log.v("CHK-GEO-URI", geo);
             //intent.setData takes an Uri and hence above Uri.parse on string is done
             intent.setData(geolocation);
-            if (intent.resolveActivity(getActivity().getPackageManager()) != null) {
+            if (intent.resolveActivity(this.getActivity().getPackageManager()) != null) {
                 startActivity(intent);
             }
+
 
         }
 
@@ -188,7 +201,7 @@ public class ForecastFragment extends Fragment {
         The code below gets the saved preference in edittextprefernce
          */
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-        return prefs.getString("location", "94303");
+        return prefs.getString("location", "110010");
 
     }
 
@@ -307,7 +320,9 @@ public class ForecastFragment extends Fragment {
                         high = (high * 1.8) + 32;
                         low = (low * 1.8) + 32;
                     } else
-                        Log.e("CHK-PREFS-TEST", getImperialOrMetric());
+                    //Log.e("CHK-PREFS-TEST", getImperialOrMetric());
+                    {
+                    }
                 } catch (Exception e) {
                     Log.e("CHK-PREFS-TEST", "IF-DID-NOT-EXEC", e);
                 }

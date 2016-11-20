@@ -17,9 +17,13 @@
 package com.example.android.sunshine.app;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.ShareActionProvider;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -31,6 +35,7 @@ import static com.example.android.sunshine.app.R.layout.fragment_detail;
 
 
 public class DetailActivity extends AppCompatActivity {
+    private ShareActionProvider mShareActionProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,9 +52,36 @@ public class DetailActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.forecastfragment, menu);
+        getMenuInflater().inflate(R.menu.detail, menu);
+       /*
+       The below code implements the shareActionProvider function.
+       It uses setShareIntent() and createShareItent() in addition to below code
+        */
+        MenuItem item = menu.findItem(R.id.detail_item_share);
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+        setShareIntent(createShareIntent());
+        //Return true to display menu
         return true;
     }
+
+
+    // Call to update the share intent
+    private void setShareIntent(Intent shareIntent) {
+        if (mShareActionProvider != null) {
+            mShareActionProvider.setShareIntent(shareIntent);
+        }
+    }
+
+    private Intent createShareIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        Intent intent = this.getIntent();
+        String weather = intent.getStringExtra(Intent.EXTRA_TEXT);
+        shareIntent.putExtra(Intent.EXTRA_TEXT,
+                weather + "#SunshineApp");
+        return shareIntent;
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -59,8 +91,8 @@ public class DetailActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
-            Intent intent = new Intent(this, ForecastFragment.class);
+        if (id == R.id.detail_action_refresh) {
+            Intent intent = new Intent(getBaseContext(), ForecastFragment.class);
             intent.putExtra("menu", "onOptionsItemSelected");//goes to previous Intent
             startActivity(intent);
 
@@ -69,15 +101,30 @@ public class DetailActivity extends AppCompatActivity {
         /*
         The code below calls the setting activity class
          */
-        if (id == R.id.settings) {
+        if (id == R.id.detail_settings) {
             Intent intent = new Intent(getBaseContext(), SettingsActivity.class);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             startActivity(intent);
 
             return true;
         }
+        if (id == R.id.detail_see_map) {
+            Intent intent1 = this.getIntent();
+            String geo = intent1.getStringExtra("GEO-TEXT");
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            Uri geolocation = Uri.parse(geo);
+            Log.v("CHK-GEO-URI", geo);
+            //intent.setData takes an Uri and hence above Uri.parse on string is done
+            intent.setData(geolocation);
+            if (intent.resolveActivity(this.getBaseContext().getPackageManager()) != null) {
+                startActivity(intent);
+            }
+
+
+        }
         return super.onOptionsItemSelected(item);
     }
+
 
     /**
      * A placeholder fragment containing a simple view.

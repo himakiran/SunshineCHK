@@ -3,6 +3,8 @@ package com.example.android.sunshine.app;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuInflater;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -32,6 +34,14 @@ public class MainActivity extends AppCompatActivity {
         // ATTENTION: This was auto-generated to implement the App Indexing API.
         // See https://g.co/AppIndexing/AndroidStudio for more information.
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
+    }
+    // to create the menu
+
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // this code inflates the menu we detailed in main.xml
+        inflater.inflate(R.menu.main, menu);
+
+
     }
 
     /*

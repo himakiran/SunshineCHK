@@ -14,5 +14,6 @@
     <string name="pref_temp_title">PICK YOUR UNITS</string>
     <string name="metric">METRIC</string>
     <string name="imperial">IMPERIAL</string>
+    <string name="view_loc">View Location</string>
 
 </resources>
