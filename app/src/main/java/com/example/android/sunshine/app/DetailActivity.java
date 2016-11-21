@@ -75,6 +75,7 @@ public class DetailActivity extends AppCompatActivity {
     private Intent createShareIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.setType("text/plain");
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
         Intent intent = this.getIntent();
         String weather = intent.getStringExtra(Intent.EXTRA_TEXT);
         shareIntent.putExtra(Intent.EXTRA_TEXT,
