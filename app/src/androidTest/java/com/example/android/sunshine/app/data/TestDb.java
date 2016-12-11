@@ -25,6 +25,7 @@ import java.util.HashSet;
 public class TestDb extends AndroidTestCase {
 
     public static final String LOG_TAG = TestDb.class.getSimpleName();
+    public static long rowID;
 
     // Since we want each test to start with a clean slate
     void deleteTheDatabase() {
@@ -125,7 +126,7 @@ public class TestDb extends AndroidTestCase {
 
         // Insert ContentValues into database and get a row ID back
 
-        dB.insert(WeatherContract.LocationEntry.TABLE_NAME, null, cv);
+        rowID = dB.insert(WeatherContract.LocationEntry.TABLE_NAME, null, cv);
 
         // Query the database and receive a Cursor back
 
@@ -154,47 +155,43 @@ public class TestDb extends AndroidTestCase {
         database.  We've done a lot of work for you.  You'll want to look in TestUtilities
         where you can use the "createWeatherValues" function.  You can
         also make use of the validateCurrentRecord function from within TestUtilities.
-
+    */
     public void testWeatherTable() {
+        // First step: Get reference to writable database
 
-
-
+        SQLiteDatabase dB = new WeatherDbHelper(
+                this.mContext).getWritableDatabase();
 
         // Create ContentValues of what you want to insert
-        // (you can use the createWeatherValues TestUtilities function if you wish)
+        // (you can use the createNorthPoleLocationValues if you wish)
         TestUtilities t = new TestUtilities();
 
-        ContentValues cv = t.createNorthPoleLocationValues();
-
-        // we first insert entries in location table with below statement and using the resultant long rowID
-        // Which we get we create weatherValues.
-
-        cv = t.createWeatherValues(rowID);
+        ContentValues cv = t.createWeatherValues(rowID);
 
         // Now we insert weatherValues into weather table
 
-        insertTable(dB,cv,WeatherContract.WeatherEntry.TABLE_NAME);
+        dB.insert(WeatherContract.WeatherEntry.TABLE_NAME, null, cv);
 
         // Query the database and receive a Cursor back
 
-        Cursor d  = dB.rawQuery("SELECT * FROM " + WeatherContract.WeatherEntry.TABLE_NAME ,null);
+        Cursor C = dB.rawQuery("SELECT * FROM " + WeatherContract.WeatherEntry.TABLE_NAME, null);
 
 
         // Move the cursor to a valid database row
-        d.moveToFirst();
+        C.moveToFirst();
 
 
         // Validate data in resulting Cursor with the original ContentValues
         // (you can use the validateCurrentRecord function in TestUtilities to validate the
         // query if you like)
 
-        t.validateCurrentRecord("RECORDS-NOT-TALLIED",d,cv);
+        t.validateCurrentRecord("RECORDS-NOT-TALLIED", C, cv);
         // Finally, close the cursor and database
-        d.close();
+        C.close();
         dB.close();
 
 
-    } */
+    }
 
 
     /*
