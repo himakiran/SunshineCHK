@@ -33,6 +33,29 @@ import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
 public class TestProvider extends AndroidTestCase {
 
     public static final String LOG_TAG = TestProvider.class.getSimpleName();
+    static private final int BULK_INSERT_RECORDS_TO_INSERT = 10;
+
+    static ContentValues[] createBulkInsertWeatherValues(long locationRowId) {
+        long currentTestDate = TestUtilities.TEST_DATE;
+        long millisecondsInADay = 1000 * 60 * 60 * 24;
+        ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
+
+        for (int i = 0; i < BULK_INSERT_RECORDS_TO_INSERT; i++, currentTestDate += millisecondsInADay) {
+            ContentValues weatherValues = new ContentValues();
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_LOC_KEY, locationRowId);
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATE, currentTestDate);
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DEGREES, 1.1);
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_HUMIDITY, 1.2 + 0.01 * (float) i);
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_PRESSURE, 1.3 - 0.01 * (float) i);
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP, 75 + i);
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP, 65 - i);
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_SHORT_DESC, "Asteroids");
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WIND_SPEED, 5.5 + 0.2 * (float) i);
+            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WEATHER_ID, 321);
+            returnContentValues[i] = weatherValues;
+        }
+        return returnContentValues;
+    }
 
     /*
        This helper function deletes all records from both database tables using the ContentProvider.
@@ -91,22 +114,6 @@ public class TestProvider extends AndroidTestCase {
     }
 
     /*
-        Student: Refactor this function to use the deleteAllRecordsFromProvider functionality once
-        you have implemented delete functionality there.
-     */
-    public void deleteAllRecords() {
-        deleteAllRecordsFromDB();
-    }
-
-    // Since we want each test to start with a clean slate, run deleteAllRecords
-    // in setUp (called by the test runner before each test).
-    @Override
-    protected void setUp() throws Exception {
-        super.setUp();
-        deleteAllRecords();
-    }
-
-    /*
         This test checks to make sure that the content provider is registered correctly.
         Students: Uncomment this test to make sure you've correctly registered the WeatherProvider.
      */
@@ -134,40 +141,12 @@ public class TestProvider extends AndroidTestCase {
 //    }
 
     /*
-            This test doesn't touch the database.  It verifies that the ContentProvider returns
-            the correct type for each type of URI that it can handle.
-            Students: Uncomment this test to verify that your implementation of GetType is
-            functioning correctly.
-         */
-//    public void testGetType() {
-//        // content://com.example.android.sunshine.app/weather/
-//        String type = mContext.getContentResolver().getType(WeatherEntry.CONTENT_URI);
-//        // vnd.android.cursor.dir/com.example.android.sunshine.app/weather
-//        assertEquals("Error: the WeatherEntry CONTENT_URI should return WeatherEntry.CONTENT_TYPE",
-//                WeatherEntry.CONTENT_TYPE, type);
-//
-//        String testLocation = "94074";
-//        // content://com.example.android.sunshine.app/weather/94074
-//        type = mContext.getContentResolver().getType(
-//                WeatherEntry.buildWeatherLocation(testLocation));
-//        // vnd.android.cursor.dir/com.example.android.sunshine.app/weather
-//        assertEquals("Error: the WeatherEntry CONTENT_URI with location should return WeatherEntry.CONTENT_TYPE",
-//                WeatherEntry.CONTENT_TYPE, type);
-//
-//        long testDate = 1419120000L; // December 21st, 2014
-//        // content://com.example.android.sunshine.app/weather/94074/20140612
-//        type = mContext.getContentResolver().getType(
-//                WeatherEntry.buildWeatherLocationWithDate(testLocation, testDate));
-//        // vnd.android.cursor.item/com.example.android.sunshine.app/weather/1419120000
-//        assertEquals("Error: the WeatherEntry CONTENT_URI with location and date should return WeatherEntry.CONTENT_ITEM_TYPE",
-//                WeatherEntry.CONTENT_ITEM_TYPE, type);
-//
-//        // content://com.example.android.sunshine.app/location/
-//        type = mContext.getContentResolver().getType(LocationEntry.CONTENT_URI);
-//        // vnd.android.cursor.dir/com.example.android.sunshine.app/location
-//        assertEquals("Error: the LocationEntry CONTENT_URI should return LocationEntry.CONTENT_TYPE",
-//                LocationEntry.CONTENT_TYPE, type);
-//    }
+        Student: Refactor this function to use the deleteAllRecordsFromProvider functionality once
+        you have implemented delete functionality there.
+     */
+    public void deleteAllRecords() {
+        deleteAllRecordsFromDB();
+    }
 
 
     /*
@@ -428,28 +407,48 @@ public class TestProvider extends AndroidTestCase {
 //        mContext.getContentResolver().unregisterContentObserver(weatherObserver);
 //    }
 
+    // Since we want each test to start with a clean slate, run deleteAllRecords
+    // in setUp (called by the test runner before each test).
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        deleteAllRecords();
+    }
 
-    static private final int BULK_INSERT_RECORDS_TO_INSERT = 10;
-    static ContentValues[] createBulkInsertWeatherValues(long locationRowId) {
-        long currentTestDate = TestUtilities.TEST_DATE;
-        long millisecondsInADay = 1000*60*60*24;
-        ContentValues[] returnContentValues = new ContentValues[BULK_INSERT_RECORDS_TO_INSERT];
+    /*
+            This test doesn't touch the database.  It verifies that the ContentProvider returns
+            the correct type for each type of URI that it can handle.
+            Students: Uncomment this test to verify that your implementation of GetType is
+            functioning correctly.
+         */
+    public void testGetType() {
+        // content://com.example.android.sunshine.app/weather/
+        String type = mContext.getContentResolver().getType(WeatherEntry.CONTENT_URI);
+        // vnd.android.cursor.dir/com.example.android.sunshine.app/weather
+        assertEquals("Error: the WeatherEntry CONTENT_URI should return WeatherEntry.CONTENT_TYPE",
+                WeatherEntry.CONTENT_TYPE, type);
 
-        for ( int i = 0; i < BULK_INSERT_RECORDS_TO_INSERT; i++, currentTestDate+= millisecondsInADay ) {
-            ContentValues weatherValues = new ContentValues();
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_LOC_KEY, locationRowId);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DATE, currentTestDate);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_DEGREES, 1.1);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_HUMIDITY, 1.2 + 0.01 * (float) i);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_PRESSURE, 1.3 - 0.01 * (float) i);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MAX_TEMP, 75 + i);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_MIN_TEMP, 65 - i);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_SHORT_DESC, "Asteroids");
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WIND_SPEED, 5.5 + 0.2 * (float) i);
-            weatherValues.put(WeatherContract.WeatherEntry.COLUMN_WEATHER_ID, 321);
-            returnContentValues[i] = weatherValues;
-        }
-        return returnContentValues;
+        String testLocation = "94074";
+        // content://com.example.android.sunshine.app/weather/94074
+        type = mContext.getContentResolver().getType(
+                WeatherEntry.buildWeatherLocation(testLocation));
+        // vnd.android.cursor.dir/com.example.android.sunshine.app/weather
+        assertEquals("Error: the WeatherEntry CONTENT_URI with location should return WeatherEntry.CONTENT_TYPE",
+                WeatherEntry.CONTENT_TYPE, type);
+
+        long testDate = 1419120000L; // December 21st, 2014
+        // content://com.example.android.sunshine.app/weather/94074/20140612
+        type = mContext.getContentResolver().getType(
+                WeatherEntry.buildWeatherLocationWithDate(testLocation, testDate));
+        // vnd.android.cursor.item/com.example.android.sunshine.app/weather/1419120000
+        assertEquals("Error: the WeatherEntry CONTENT_URI with location and date should return WeatherEntry.CONTENT_ITEM_TYPE",
+                WeatherEntry.CONTENT_ITEM_TYPE, type);
+
+        // content://com.example.android.sunshine.app/location/
+        type = mContext.getContentResolver().getType(LocationEntry.CONTENT_URI);
+        // vnd.android.cursor.dir/com.example.android.sunshine.app/location
+        assertEquals("Error: the LocationEntry CONTENT_URI should return LocationEntry.CONTENT_TYPE",
+                LocationEntry.CONTENT_TYPE, type);
     }
 
     // Student: Uncomment this test after you have completed writing the BulkInsert functionality
