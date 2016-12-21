@@ -32,7 +32,11 @@ public class WeatherProvider extends ContentProvider {
     static final int LOCATION = 300;
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+    // The below query builder will be used for WEATHER,WEATHER_WITH_LOCATION,WEATHER_WITH_LOCATION_AND_DATE
     private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
+    // The below query builder will be used for LOCATION
+    private static final SQLiteQueryBuilder sLocationQueryBuilder;
+
     //location.location_setting = ?
     private static final String sLocationSettingSelection =
             WeatherContract.LocationEntry.TABLE_NAME +
@@ -62,6 +66,14 @@ public class WeatherProvider extends ContentProvider {
                         "." + WeatherContract.LocationEntry._ID);
     }
 
+    static {
+        sLocationQueryBuilder = new SQLiteQueryBuilder();
+
+        //This only sets the location table.
+
+        sLocationQueryBuilder.setTables(
+                WeatherContract.LocationEntry.TABLE_NAME);
+    }
     private WeatherDbHelper mOpenHelper;
 
     /*
@@ -141,6 +153,31 @@ public class WeatherProvider extends ContentProvider {
         );
     }
 
+    // getWeather uses the same already defined sWeatherByLocationSettingQueryBuilder
+
+    private Cursor getWeather(Uri U, String[] projection, String sortOrder) {
+
+        return sWeatherByLocationSettingQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                null,
+                null,
+                null,
+                null,
+                sortOrder);
+    }
+
+    // getLocation uses a new sLocationQueryBuilder which was defined earlier to set the Location table.
+    private Cursor getLocation(Uri U, String[] projection, String sortOrder) {
+
+        return sLocationQueryBuilder.query(mOpenHelper.getReadableDatabase(),
+                projection,
+                null,
+                null,
+                null,
+                null,
+                sortOrder);
+    }
+
     /*
         Students: We've coded this for you.  We just create a new WeatherDbHelper for later use
         here.
@@ -197,12 +234,12 @@ public class WeatherProvider extends ContentProvider {
             }
             // "weather"
             case WEATHER: {
-                retCursor = null;
+                retCursor = getWeather(uri, projection, sortOrder);
                 break;
             }
             // "location"
             case LOCATION: {
-                retCursor = null;
+                retCursor = getLocation(uri, projection, sortOrder);
                 break;
             }
 
