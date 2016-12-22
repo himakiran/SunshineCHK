@@ -331,7 +331,25 @@ public class WeatherProvider extends ContentProvider {
             Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         // Student: This is a lot like the delete function.  We return the number of rows impacted
         // by the update.
-        return 0;
+        final SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        final int match = sUriMatcher.match(uri);
+        int rowsReturned = 0;
+
+        switch (match) {
+            case WEATHER: {
+                rowsReturned = db.update(WeatherContract.WeatherEntry.TABLE_NAME, values, selection, selectionArgs);
+                getContext().getContentResolver().notifyChange(uri, null);
+                break;
+            }
+            case LOCATION: {
+                rowsReturned = db.update(WeatherContract.LocationEntry.TABLE_NAME, values, selection, selectionArgs);
+                getContext().getContentResolver().notifyChange(uri, null);
+                break;
+            }
+            default:
+                throw new UnsupportedOperationException("Unknown uri: " + uri);
+        }
+        return rowsReturned;
     }
 
     @Override
