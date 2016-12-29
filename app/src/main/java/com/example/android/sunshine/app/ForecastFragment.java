@@ -6,6 +6,7 @@ package com.example.android.sunshine.app;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -17,14 +18,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import java.util.ArrayList;
+import com.example.android.sunshine.app.data.WeatherContract;
 
-import static com.example.android.sunshine.app.R.id.list_item_forecast_textview;
 import static com.example.android.sunshine.app.R.layout.fragment_main;
+
+//import android.widget.AdapterView;
+//import android.widget.ArrayAdapter;
+//import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -34,7 +36,7 @@ public class ForecastFragment extends Fragment {
     public double geoLong;
     public Uri geolocation;
     // mForecastAdapter has been made a global variable so that it can be accessed from within FetchWeatherTask
-    private ArrayAdapter<String> mForecastAdapter;
+    private ForecastAdapter mForecastAdapter;
 
     public ForecastFragment() {
     }
@@ -52,11 +54,10 @@ public class ForecastFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // the below line calls the layout defined in fragment_main
-        View rootView = inflater.inflate(fragment_main, container, false);
+
 
         // this is the array values that get filled in the layout
-        ArrayList<String> dailyWeatherUpdate = new ArrayList<String>();
+        //ArrayList<String> dailyWeatherUpdate = new ArrayList<String>();
 
             /*
              the below code connects the adapter to the string array and ensures the values are
@@ -64,8 +65,23 @@ public class ForecastFragment extends Fragment {
             correctly filled in list_item_forecast_textview which is part of list_item_forecast layout
 
             */
-        mForecastAdapter = new ArrayAdapter<String>(this.getActivity(), R.layout.list_item_forecast, list_item_forecast_textview, dailyWeatherUpdate);
-        FetchWeatherTask fetch = new FetchWeatherTask(getContext(), mForecastAdapter);
+        /*
+            Code below added from gist of lesson 5/16 of loaders
+         */
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+        Cursor cur = getActivity().getContentResolver().query(weatherForLocationUri,
+                null, null, null, sortOrder);
+
+        mForecastAdapter = new ForecastAdapter(this.getActivity(), cur, 0);
+
+        // the below line calls the layout defined in fragment_main
+        View rootView = inflater.inflate(fragment_main, container, false);
+
+
+        FetchWeatherTask fetch = new FetchWeatherTask(getContext());
         //fetch takes one parameter that is a string
         // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
         fetch.execute(getzipcode());
@@ -79,30 +95,30 @@ public class ForecastFragment extends Fragment {
         The below code from the gist of the class to replace the toast in MainActivity.java has been
         included here ..the gist of the class does not require toast_layout.xml
         */
-        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String forecast = mForecastAdapter.getItem(position);
-                /*
-                The below code takes geoLat and geoLong from the doInBackground() and sets the
-                Uri geolocation.
-                 */
-                String geo = "geo:" + Double.valueOf(geoLat) + "," + Double.valueOf(geoLong);
-                geolocation = Uri.parse(geo);
-                /*
-                The code below illustrates making a new intent, declaring the second activity to open
-                ie DetailActivity and then pass a string parameter ie forecast. which will be used
-                by the onCreateView() in detailActivity to set the weataher string.
-                It also passes geo which shall be used by the if (id == R.id.detail_see_map)
-                function in detailActivity to set the Uri.
-                 */
-
-                Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
-                intent.putExtra("GEO-TEXT", geo);
-                startActivity(intent);
-            }
-        });
+//        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
+//                //String forecast = mForecastAdapter.getItem(position);
+//                /*
+//                The below code takes geoLat and geoLong from the doInBackground() and sets the
+//                Uri geolocation.
+//                 */
+//                String geo = "geo:" + Double.valueOf(geoLat) + "," + Double.valueOf(geoLong);
+//                geolocation = Uri.parse(geo);
+//                /*
+//                The code below illustrates making a new intent, declaring the second activity to open
+//                ie DetailActivity and then pass a string parameter ie forecast. which will be used
+//                by the onCreateView() in detailActivity to set the weataher string.
+//                It also passes geo which shall be used by the if (id == R.id.detail_see_map)
+//                function in detailActivity to set the Uri.
+//                 */
+//
+//                Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
+//                intent.putExtra("GEO-TEXT", geo);
+//                startActivity(intent);
+//            }
+//        });
 
 
         return rootView;
@@ -168,12 +184,13 @@ public class ForecastFragment extends Fragment {
     }
 
     private void updateWeather() {
-        FetchWeatherTask fetch = new FetchWeatherTask(getContext(), mForecastAdapter);
+        FetchWeatherTask fetch = new FetchWeatherTask(getActivity());
+        String location = Utility.getPreferredLocation(getActivity());
         //fetch takes one parameter that is a string
         // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
 
         try {
-            fetch.execute(getzipcode());
+            fetch.execute(location);
             //Log.v("CHK-ZIPCODE-FUNCTION", zipcode);
         } catch (Exception e) {
             Log.e("CHK-ZIPCODE-FUNCTION", "String not returned", e);
