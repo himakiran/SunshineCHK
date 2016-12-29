@@ -24,9 +24,11 @@ presently FetchWeatherTask is an inner class in  ForecastFragment.java
 
 package com.example.android.sunshine.app;
 
+import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
@@ -34,6 +36,7 @@ import android.text.format.Time;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import com.example.android.sunshine.app.data.WeatherContract;
 import com.example.android.sunshine.app.data.WeatherContract.WeatherEntry;
 
 import org.json.JSONArray;
@@ -111,12 +114,55 @@ public class FetchWeatherTask extends AsyncTask<String, Void, String[]> {
      * @param lat             the latitude of the city
      * @param lon             the longitude of the city
      * @return the row ID of the added location.
+     *
+     */
+    /*
+        ContentResolver.query(uri,projection,selection,selectionArgs,sortOrder,cancellationSignal)
+        uri	Uri: The URI, using the content:// scheme, for the content to retrieve.
+        projection	String: A list of which columns to return. Passing null will return all columns, which is inefficient.
+        selection	String: A filter declaring which rows to return, formatted as an SQL WHERE clause (excluding the WHERE itself). Passing null will return all rows for the given URI.
+        selectionArgs	String: You may include ?s in selection, which will be replaced by the values from selectionArgs, in the order that they appear in the selection. The values will be bound as Strings.
+        sortOrder	String: How to order the rows, formatted as an SQL ORDER BY clause (excluding the ORDER BY itself). Passing null will use the default sort order, which may be unordered.
+        cancellationSignal	CancellationSignal: A signal to cancel the operation in progress, or null if none. If the operation is canceled, then OperationCanceledException will be thrown when the query is executed.
      */
     long addLocation(String locationSetting, String cityName, double lat, double lon) {
         // Students: First, check if the location with this city name exists in the db
         // If it exists, return the current ID
         // Otherwise, insert it using the content resolver and the base URI
-        return -1;
+        long locID;  // THIS IS THE VALUE WHICH IS RETURNED
+        /*
+            We first query the location database to see if a city already exists with the name cityName.
+         */
+        Cursor c = mContext.getContentResolver().query(WeatherContract.LocationEntry.CONTENT_URI, new String[]{WeatherContract.LocationEntry._ID},
+                WeatherContract.LocationEntry.COLUMN_CITY_NAME + " = ?", new String[]{cityName}, null);
+        /*
+         If city name alredy exists then get its row index.
+         */
+        if (c.moveToFirst()) {
+            int locIndex = c.getColumnIndex(WeatherContract.LocationEntry._ID);
+            locID = c.getLong(locIndex);
+        } else {
+            /*
+                  We create entry for the new cityname
+             */
+            ContentValues locationValues = new ContentValues();
+            locationValues.put(WeatherContract.LocationEntry.COLUMN_CITY_NAME, cityName);
+            locationValues.put(WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING, locationSetting);
+            locationValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LAT, lat);
+            locationValues.put(WeatherContract.LocationEntry.COLUMN_COORD_LONG, lon);
+
+            /*
+                We insert the above values in our db.
+             */
+            Uri insertedUri = mContext.getContentResolver().insert(WeatherContract.LocationEntry.CONTENT_URI, locationValues);
+
+            locID = ContentUris.parseId(insertedUri);
+        }
+
+        c.close();
+
+        return locID;
+
     }
 
     /*
