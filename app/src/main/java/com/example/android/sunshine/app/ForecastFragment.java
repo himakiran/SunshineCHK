@@ -11,6 +11,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -31,7 +34,8 @@ import static com.example.android.sunshine.app.R.layout.fragment_main;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class ForecastFragment extends Fragment {
+public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    private static final int FORECAST_LOADER = 12;
     public double geoLat;
     public double geoLong;
     public Uri geolocation;
@@ -47,7 +51,7 @@ public class ForecastFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //this code makes sure menu gets displayed and further allows onCreateOptionsMenu to function
         setHasOptionsMenu(true);
-
+        getLoaderManager().initLoader(12, null, this);
     }
 
     //to create the view
@@ -68,14 +72,18 @@ public class ForecastFragment extends Fragment {
         /*
             Code below added from gist of lesson 5/16 of loaders
          */
-        String locationSetting = Utility.getPreferredLocation(getActivity());
-        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
-        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
-                locationSetting, System.currentTimeMillis());
-        Cursor cur = getActivity().getContentResolver().query(weatherForLocationUri,
-                null, null, null, sortOrder);
+        // We have commented this as we will now use cursor loader to do the same functionality
+//        String locationSetting = Utility.getPreferredLocation(getActivity());
+//        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+//        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+//                locationSetting, System.currentTimeMillis());
+//        Cursor cur = getActivity().getContentResolver().query(weatherForLocationUri,
+//                null, null, null, sortOrder);
+//
+//        mForecastAdapter = new ForecastAdapter(this.getActivity(), cur, 0);
 
-        mForecastAdapter = new ForecastAdapter(this.getActivity(), cur, 0);
+        // The CursorAdapter will take data from our cursor and populate the ListView.
+        mForecastAdapter = new ForecastAdapter(getActivity(), null, 0);
 
         // the below line calls the layout defined in fragment_main
         View rootView = inflater.inflate(fragment_main, container, false);
@@ -123,6 +131,17 @@ public class ForecastFragment extends Fragment {
 
         return rootView;
 
+    }
+
+    /*
+            This code will now use cursor loader to replace the functionality of lines
+            mForecastAdapter = new ForecastAdapter(this.getActivity(), cur, 0);
+            in onCreateView
+     */
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        getLoaderManager().initLoader(FORECAST_LOADER, null, this);
+        super.onActivityCreated(savedInstanceState);
     }
 
     // to create the menu
@@ -220,6 +239,29 @@ public class ForecastFragment extends Fragment {
 
 
     }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int i, Bundle args) {
+        String locationSetting = Utility.getPreferredLocation(getActivity());
+        String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+                locationSetting, System.currentTimeMillis());
+
+        return new CursorLoader(this.getContext(), weatherForLocationUri, null, null, null, sortOrder);
+
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mForecastAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mForecastAdapter.swapCursor(null);
+
+    }
+
 
 //
 //    // to fetch data from external source
