@@ -89,11 +89,11 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         View rootView = inflater.inflate(fragment_main, container, false);
 
 
-        FetchWeatherTask fetch = new FetchWeatherTask(getContext());
-        //fetch takes one parameter that is a string
-        // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
-        fetch.execute(getzipcode());
-            /*
+//        FetchWeatherTask fetch = new FetchWeatherTask(getContext());
+//        //fetch takes one parameter that is a string
+//        // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
+//        fetch.execute(getzipcode());
+           /*
             the code below loads the fragment_main.xml layout which has the id listview_forecast
             and connects the adapter to it...
             */
@@ -244,8 +244,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int i, Bundle args) {
         String locationSetting = Utility.getPreferredLocation(getActivity());
         String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
-        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
-                locationSetting, System.currentTimeMillis());
+        //Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+        //locationSetting, System.currentTimeMillis());
+        /*
+            Corrected this line after advice by ashesh on 1:1 appointment. Now the app is displaying
+            data on the main screen.
+         */
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.CONTENT_URI;
 
         return new CursorLoader(this.getContext(), weatherForLocationUri, null, null, null, sortOrder);
 
