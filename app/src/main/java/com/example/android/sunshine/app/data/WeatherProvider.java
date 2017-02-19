@@ -30,27 +30,44 @@ public class WeatherProvider extends ContentProvider {
     static final int WEATHER_WITH_LOCATION = 101;
     static final int WEATHER_WITH_LOCATION_AND_DATE = 102;
     static final int LOCATION = 300;
+
     // The URI Matcher used by this content provider.
     private static final UriMatcher sUriMatcher = buildUriMatcher();
+
+    /*
+        The queries which the app requires will be coded using the two below SQLiteQueryBuilders..
+     */
+
     // The below query builder will be used for WEATHER,WEATHER_WITH_LOCATION,WEATHER_WITH_LOCATION_AND_DATE
     private static final SQLiteQueryBuilder sWeatherByLocationSettingQueryBuilder;
+
     // The below query builder will be used for LOCATION
     private static final SQLiteQueryBuilder sLocationQueryBuilder;
+
+    /*
+        String required for building queries
+     */
 
     //location.location_setting = ?
     private static final String sLocationSettingSelection =
             WeatherContract.LocationEntry.TABLE_NAME +
                     "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? ";
+
     //location.location_setting = ? AND date >= ?
     private static final String sLocationSettingWithStartDateSelection =
             WeatherContract.LocationEntry.TABLE_NAME +
                     "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
                     WeatherContract.WeatherEntry.COLUMN_DATE + " >= ? ";
+
     //location.location_setting = ? AND date = ?
     private static final String sLocationSettingAndDaySelection =
             WeatherContract.LocationEntry.TABLE_NAME +
                     "." + WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING + " = ? AND " +
                     WeatherContract.WeatherEntry.COLUMN_DATE + " = ? ";
+
+    /*
+            Building the two querybuilders.
+     */
 
     static{
         sWeatherByLocationSettingQueryBuilder = new SQLiteQueryBuilder();
@@ -74,6 +91,10 @@ public class WeatherProvider extends ContentProvider {
         sLocationQueryBuilder.setTables(
                 WeatherContract.LocationEntry.TABLE_NAME);
     }
+
+    /*
+        An instance of the WeatherDbHelper to get the weather database to run queries and insert,update,delete operations.
+     */
     private WeatherDbHelper mOpenHelper;
 
     /*
@@ -82,6 +103,12 @@ public class WeatherProvider extends ContentProvider {
         and LOCATION integer constants defined above.  You can test this by uncommenting the
         testUriMatcher test within TestUriMatcher.
      */
+
+    /*
+            The code below creates the URI matcher which will be used in the app to run queries against
+            the db and get results.
+     */
+
     static UriMatcher buildUriMatcher() {
         // 1) The code passed into the constructor represents the code to return for the root
         // URI.  It's common to use NO_MATCH as the code for this case. Add the constructor below.
@@ -113,6 +140,9 @@ public class WeatherProvider extends ContentProvider {
         return UR;
     }
 
+    /*
+        Query implementation : getWeatherByLocation
+     */
     private Cursor getWeatherByLocationSetting(Uri uri, String[] projection, String sortOrder) {
         String locationSetting = WeatherContract.WeatherEntry.getLocationSettingFromUri(uri);
         long startDate = WeatherContract.WeatherEntry.getStartDateFromUri(uri);
@@ -138,6 +168,10 @@ public class WeatherProvider extends ContentProvider {
         );
     }
 
+    /*
+        Query implementation : getWeatherByLocationAndDate
+     */
+
     private Cursor getWeatherByLocationSettingAndDate(
             Uri uri, String[] projection, String sortOrder) {
         String locationSetting = WeatherContract.WeatherEntry.getLocationSettingFromUri(uri);
@@ -153,6 +187,10 @@ public class WeatherProvider extends ContentProvider {
         );
     }
 
+    /*
+        Query implementation : getWeather
+     */
+
     // getWeather uses the same already defined sWeatherByLocationSettingQueryBuilder
 
     private Cursor getWeather(Uri U, String[] projection, String sortOrder) {
@@ -166,6 +204,10 @@ public class WeatherProvider extends ContentProvider {
                 sortOrder);
     }
 
+    /*
+        Query implementation : getLocation
+     */
+
     // getLocation uses a new sLocationQueryBuilder which was defined earlier to set the Location table.
     private Cursor getLocation(Uri U, String[] projection, String sortOrder) {
 
@@ -177,6 +219,7 @@ public class WeatherProvider extends ContentProvider {
                 null,
                 sortOrder);
     }
+
 
     /*
         Students: We've coded this for you.  We just create a new WeatherDbHelper for later use
@@ -213,7 +256,10 @@ public class WeatherProvider extends ContentProvider {
                 throw new UnsupportedOperationException("Unknown uri: " + uri);
         }
     }
-
+    /*
+            The code below overides the default query method in ContentProvider class by making use
+            of the UriMatcher we coded above to return suitable cursor to queries by the app.
+     */
     @Override
     public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs,
                         String sortOrder) {

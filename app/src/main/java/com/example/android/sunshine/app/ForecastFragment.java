@@ -224,7 +224,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         The code below gets the saved preference in edittextprefernce
          */
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this.getContext());
-        return prefs.getString("location", "110010");
+        return prefs.getString("location", "91101");
 
     }
 

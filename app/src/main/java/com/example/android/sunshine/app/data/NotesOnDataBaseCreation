@@ -1,0 +1,22 @@
+
+
+    These are my Notes which explain the various files in the data folder..
+
+    WeatherDbHelper is the class that helps create the database. It requires that the tables of the database are alreay created
+    in WeatherContract.
+    In this case we have a weather database with tables weather and location.
+    Hence firstly we create the WeatherContract class which contains two classes WeatherEntry and LocationEntry both of which
+    extend BaseColumns and help create tables weather and location accordingly.
+
+    WeatherDbHelper class uses the WeatherEntry and LocationEntry fields to make a sql statement that can be executed to create
+    a weather db with tables weather and location.
+
+    WeatherProvider is the class that is an implementation of a content provider. It uses contentResolver to return cursors.
+    Cursor is nothing but a a set of rows that are the result of a query.
+    WeatherProvider class has code which builds all the required queries the app requires. After that it implements and overrides
+    the default content provider implementations of insert,query,update,delete and onCreate().
+    It creates an instance of the WeatherDbHelper class in onCreate() which is used to return the weather db to run the queries
+    and other ops on.
+    WeatherProvider also creates an UriMatcher that is used in the overidden default query()method of ContentProvider class.
+    The code in the app calls on the query function with an Uri. The UriMatcher matches the right uri and helps the query
+    method in returning the correct cursor. The UriMatcher is also used in insert,update,delete,bulkinsert ops.
