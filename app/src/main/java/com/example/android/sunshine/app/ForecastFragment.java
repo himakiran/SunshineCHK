@@ -51,7 +51,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         super.onCreate(savedInstanceState);
         //this code makes sure menu gets displayed and further allows onCreateOptionsMenu to function
         setHasOptionsMenu(true);
-        getLoaderManager().initLoader(12, null, this);
+        getLoaderManager().initLoader(FORECAST_LOADER, null, this);
     }
 
     //to create the view
