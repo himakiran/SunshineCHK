@@ -34,7 +34,35 @@ import static com.example.android.sunshine.app.R.layout.fragment_main;
  * A placeholder fragment containing a simple view.
  */
 public class ForecastFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    // These indices are tied to FORECAST_COLUMNS.  If FORECAST_COLUMNS changes, these
+    // must change.
+    static final int COL_WEATHER_ID = 0;
+    static final int COL_WEATHER_DATE = 1;
+    static final int COL_WEATHER_DESC = 2;
+    static final int COL_WEATHER_MAX_TEMP = 3;
+    static final int COL_WEATHER_MIN_TEMP = 4;
+    static final int COL_LOCATION_SETTING = 5;
+    static final int COL_WEATHER_CONDITION_ID = 6;
+    static final int COL_COORD_LAT = 7;
+    static final int COL_COORD_LONG = 8;
     private static final int FORECAST_LOADER = 12;
+    private static final String[] FORECAST_COLUMNS = {
+            // In this case the id needs to be fully qualified with a table name, since
+            // the content provider joins the location & weather tables in the background
+            // (both have an _id column)
+            // On the one hand, that's annoying.  On the other, you can search the weather table
+            // using the location set by the user, which is only in the Location table.
+            // So the convenience is worth it.
+            WeatherContract.WeatherEntry.TABLE_NAME + "." + WeatherContract.WeatherEntry._ID,
+            WeatherContract.WeatherEntry.COLUMN_DATE,
+            WeatherContract.WeatherEntry.COLUMN_SHORT_DESC,
+            WeatherContract.WeatherEntry.COLUMN_MAX_TEMP,
+            WeatherContract.WeatherEntry.COLUMN_MIN_TEMP,
+            WeatherContract.LocationEntry.COLUMN_LOCATION_SETTING,
+            WeatherContract.WeatherEntry.COLUMN_WEATHER_ID,
+            WeatherContract.LocationEntry.COLUMN_COORD_LAT,
+            WeatherContract.LocationEntry.COLUMN_COORD_LONG
+    };
     public double geoLat;
     public double geoLong;
     public Uri geolocation;
@@ -96,25 +124,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-                String forecast = mForecastAdapter.getItem(position).toString();
-                /*
-                The below code takes geoLat and geoLong from the doInBackground() and sets the
-                Uri geolocation.
-                 */
-                String geo = "geo:" + Double.valueOf(geoLat) + "," + Double.valueOf(geoLong);
-                geolocation = Uri.parse(geo);
-                /*
-                The code below illustrates making a new intent, declaring the second activity to open
-                ie DetailActivity and then pass a string parameter ie forecast. which will be used
-                by the onCreateView() in detailActivity to set the weataher string.
-                It also passes geo which shall be used by the if (id == R.id.detail_see_map)
-                function in detailActivity to set the Uri.
-                 */
-
-                Intent intent = new Intent(getActivity(), DetailActivity.class).putExtra(Intent.EXTRA_TEXT, forecast);
-                intent.putExtra("GEO-TEXT", geo);
-                startActivity(intent);
+            public void onItemClick(AdapterView adapterView, View view, int position, long l) {
+                // CursorAdapter returns a cursor at the correct position for getItem(), or null
+                // if it cannot seek to that position.
+                Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
+                if (cursor != null) {
+                    String locationSetting = Utility.getPreferredLocation(getActivity());
+                    Intent intent = new Intent(getActivity(), DetailActivity.class)
+                            .setData(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
+                                    locationSetting, cursor.getLong(COL_WEATHER_DATE)
+                            ));
+                    startActivity(intent);
+                }
             }
         });
 
@@ -234,15 +255,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public Loader<Cursor> onCreateLoader(int i, Bundle args) {
         String locationSetting = Utility.getPreferredLocation(getActivity());
         String sortOrder = WeatherContract.WeatherEntry.COLUMN_DATE + " ASC";
-        //Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
-        //locationSetting, System.currentTimeMillis());
+
         /*
             Corrected this line after advice by ashesh on 1:1 appointment. Now the app is displaying
             data on the main screen.
          */
+        //Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
+        //locationSetting, System.currentTimeMillis());
+
         Uri weatherForLocationUri = WeatherContract.WeatherEntry.CONTENT_URI;
 
-        return new CursorLoader(this.getContext(), weatherForLocationUri, null, null, null, sortOrder);
+        return new CursorLoader(this.getContext(), weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
 
     }
 

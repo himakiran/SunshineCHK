@@ -141,10 +141,14 @@ public class DetailActivity extends AppCompatActivity {
 
             View rootView = inflater.inflate(fragment_detail, container, false);
             /*
-            This is how we receive the parameters from the intent passed by another activity.
+            This is how we receive the parameters from the intent passed by another activity when we use intent.setData()
              */
             Intent intent = getActivity().getIntent();
-            String weather = intent.getStringExtra(Intent.EXTRA_TEXT);
+
+            String weather = intent.getDataString();
+
+
+
             /*
             And this is how we set the text of any textview
              */
