@@ -1,55 +1,58 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_item_forecast2"
+
+<!-- Layout for weather forecast list item for future day (not today) -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:orientation="horizontal"
+    android:padding="16dp">
 
     <ImageView
-        android:id="@+id/img_weather"
+        android:id="@+id/list_item_icon"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:background="@drawable/bordera"
-        android:src="@android:drawable/sym_def_app_icon" />
+        android:src="@mipmap/ic_launcher" />
 
-    <TextView
-        android:id="@+id/date"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/fab_margin"
-        android:layout_toRightOf="@+id/img_weather"
-        android:background="@drawable/borderb"
-        android:text="Tommorow" />
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingLeft="16dp">
 
-    <TextView
-        android:id="@+id/weather_desc"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/img_weather"
-        android:layout_below="@+id/date"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_toRightOf="@+id/img_weather"
-        android:background="@drawable/border"
-        android:text="Clear" />
+        <TextView
+            android:id="@+id/list_item_date_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tomorrow" />
 
-    <TextView
-        android:id="@+id/temp_high"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_margin="@dimen/fab_margin"
-        android:background="@drawable/bordera"
-        android:text="21" />
+        <TextView
+            android:id="@+id/list_item_forecast_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Clear" />
 
-    <TextView
-        android:id="@+id/temp_low"
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/img_weather"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/temp_high"
-        android:layout_marginLeft="@dimen/fab_margin"
-        android:layout_marginRight="@dimen/fab_margin"
-        android:background="@drawable/borderb"
-        android:text="8" />
-</RelativeLayout>
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/list_item_high_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="81" />
+
+        <TextView
+            android:id="@+id/list_item_low_textview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="68" />
+    </LinearLayout>
+
+</LinearLayout>
+
