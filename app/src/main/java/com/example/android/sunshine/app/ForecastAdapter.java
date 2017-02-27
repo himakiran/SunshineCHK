@@ -72,12 +72,14 @@ public class ForecastAdapter extends CursorAdapter {
 
         // TODO Read date from cursor
 
-        String date = Utility.getFriendlyDayString(this,cursor.getLong(ForecastFragment.COL_WEATHER_DATE));
+        String date = Utility.getFriendlyDayString(mContext,cursor.getLong(ForecastFragment.COL_WEATHER_DATE));
         TextView dateView = (TextView) view.findViewById(R.id.list_item_date_textview);
+        dateView.setText(date);
 
         // TODO Read weather forecast from cursor
 
         String desc = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
+        TextView descView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
 
         // Read user preference for metric or imperial temperature units
         boolean isMetric = Utility.isMetric(context);
