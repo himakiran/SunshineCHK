@@ -145,6 +145,10 @@ public class DetailActivity extends AppCompatActivity {
                 WeatherEntry.COLUMN_SHORT_DESC,
                 WeatherEntry.COLUMN_MAX_TEMP,
                 WeatherEntry.COLUMN_MIN_TEMP,
+                WeatherEntry.COLUMN_HUMIDITY,
+                WeatherEntry.COLUMN_WIND_SPEED,
+                WeatherEntry.COLUMN_PRESSURE,
+                WeatherEntry.COLUMN_DEGREES
         };
         // these constants correspond to the projection defined above, and must change if the
         // projection changes
@@ -153,6 +157,11 @@ public class DetailActivity extends AppCompatActivity {
         private static final int COL_WEATHER_DESC = 2;
         private static final int COL_WEATHER_MAX_TEMP = 3;
         private static final int COL_WEATHER_MIN_TEMP = 4;
+        private static final int COL_WEATHER_HUMIDITY = 5;
+        private static final int COL_WEATHER_WIND_SPEED = 6;
+        private static final int COL_WEATHER_PRESSURE = 7;
+        private static final int COL_WEATHER_DEGREES = 8;
+
         private static final String LOG_TAG = PlaceholderFragment.class.getSimpleName();
         private ShareActionProvider mShareActionProvider;
         private String mForecast;
@@ -224,8 +233,9 @@ public class DetailActivity extends AppCompatActivity {
                 Log.v(LOG_TAG, "In onLoadFinished");
                 return;
             }
+            long dateInMills = data.getLong(COL_WEATHER_DATE);
 
-            String dateString = Utility.formatDate(
+            String dateString = Utility.getFormattedMonthDay(getContext(),
                     data.getLong(COL_WEATHER_DATE));
 
             String weatherDescription =
@@ -239,10 +249,37 @@ public class DetailActivity extends AppCompatActivity {
             String low = Utility.formatTemperature(getContext(),
                     data.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
 
-            mForecast = String.format("%s - %s - %s/%s", dateString, weatherDescription, high, low);
+            String humidity = String.format(getContext().getString(R.string.format_humidity), data.getFloat(COL_WEATHER_HUMIDITY));
 
-            TextView detailTextView = (TextView) getView().findViewById(R.id.detail_text);
-            detailTextView.setText(mForecast);
+            String wind = Utility.getFormattedWind(getContext(), data.getFloat(COL_WEATHER_WIND_SPEED),
+                    data.getFloat(COL_WEATHER_DEGREES));
+
+            String pressure = String.format(getContext().getString(R.string.format_pressure), data.getFloat(COL_WEATHER_PRESSURE));
+
+            TextView detailTextView = (TextView) getView().findViewById(R.id.detail_date_day);
+            detailTextView.setText(Utility.getDayName(getContext(), dateInMills));
+
+            detailTextView = (TextView) getView().findViewById(R.id.detail_date);
+            detailTextView.setText(dateString);
+
+            detailTextView = (TextView) getView().findViewById(R.id.detail_temp_high);
+            detailTextView.setText(high);
+
+            detailTextView = (TextView) getView().findViewById(R.id.detail_temp_low);
+            detailTextView.setText(low);
+
+            detailTextView = (TextView) getView().findViewById(R.id.detail_desc);
+            detailTextView.setText(weatherDescription);
+
+            detailTextView = (TextView) getView().findViewById(R.id.detail_humidity);
+            detailTextView.setText(humidity);
+
+            detailTextView = (TextView) getView().findViewById(R.id.detail_wind);
+            detailTextView.setText(wind);
+
+            detailTextView = (TextView) getView().findViewById(R.id.detail_pressure);
+            detailTextView.setText(pressure);
+
 
             // If onCreateOptionsMenu has already happened, we need to update the share intent now.
             if (mShareActionProvider != null) {
