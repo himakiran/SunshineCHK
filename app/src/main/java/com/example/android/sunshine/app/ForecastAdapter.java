@@ -28,7 +28,7 @@ public class ForecastAdapter extends CursorAdapter {
      */
     private String formatHighLows(double high, double low) {
         boolean isMetric = Utility.isMetric(mContext);
-        String highLowStr = Utility.formatTemperature(high, isMetric) + "/" + Utility.formatTemperature(low, isMetric);
+        String highLowStr = Utility.formatTemperature(mContext,high, isMetric) + "/" + Utility.formatTemperature(mContext,low, isMetric);
         return highLowStr;
     }
 
@@ -93,6 +93,8 @@ public class ForecastAdapter extends CursorAdapter {
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
+        boolean isMetric = Utility.isMetric(context);
+
         ViewHolder vh = (ViewHolder) view.getTag();
 
         vh.iconView.setImageResource(R.mipmap.ic_launcher);
@@ -103,11 +105,12 @@ public class ForecastAdapter extends CursorAdapter {
         String desc = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
         vh.descriptionView.setText(desc);
 
-        int high = cursor.getInt(ForecastFragment.COL_WEATHER_MAX_TEMP);
-        vh.highTempView.setText(String.valueOf(high));
+        double high = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
 
-        int low = cursor.getInt(ForecastFragment.COL_WEATHER_MIN_TEMP);
-        vh.lowTempView.setText(String.valueOf(low));
+        vh.highTempView.setText(Utility.formatTemperature(context,high,isMetric));
+
+        double low = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
+        vh.lowTempView.setText(Utility.formatTemperature(context,low,isMetric));
 
     }
     /**
