@@ -97,34 +97,69 @@ public class ForecastAdapter extends CursorAdapter {
 
         ViewHolder vh = (ViewHolder) view.getTag();
 
-        switch (cursor.getString(ForecastFragment.COL_WEATHER_DESC)) {
-            case "Clear":
-                vh.iconView.setImageResource(R.drawable.art_clear);
-                break;
-            case "Rain":
-                vh.iconView.setImageResource(R.drawable.art_rain);
-                break;
-            case "Clouds":
-                vh.iconView.setImageResource(R.drawable.art_clouds);
-                break;
-            case "Fog":
-                vh.iconView.setImageResource(R.drawable.art_fog);
-                break;
-            case "Light_clouds":
-                vh.iconView.setImageResource(R.drawable.art_light_clouds);
-                break;
-            case "Light_rain":
-                vh.iconView.setImageResource(R.drawable.art_light_rain);
-                break;
-            case "Snow":
-                vh.iconView.setImageResource(R.drawable.art_snow);
-                break;
-            case "Storm":
-                vh.iconView.setImageResource(R.drawable.art_storm);
-                break;
-            default:
-                vh.iconView.setImageResource(R.drawable.ic_logo);
-                break;
+        int viewType = getItemViewType(cursor.getPosition());
+
+        if (viewType == VIEW_TYPE_TODAY) {
+
+            switch (cursor.getString(ForecastFragment.COL_WEATHER_DESC)) {
+                case "Clear":
+                    vh.iconView.setImageResource(R.drawable.art_clear);
+                    break;
+                case "Rain":
+                    vh.iconView.setImageResource(R.drawable.art_rain);
+                    break;
+                case "Clouds":
+                    vh.iconView.setImageResource(R.drawable.art_clouds);
+                    break;
+                case "Fog":
+                    vh.iconView.setImageResource(R.drawable.art_fog);
+                    break;
+                case "Light_clouds":
+                    vh.iconView.setImageResource(R.drawable.art_light_clouds);
+                    break;
+                case "Light_rain":
+                    vh.iconView.setImageResource(R.drawable.art_light_rain);
+                    break;
+                case "Snow":
+                    vh.iconView.setImageResource(R.drawable.art_snow);
+                    break;
+                case "Storm":
+                    vh.iconView.setImageResource(R.drawable.art_storm);
+                    break;
+                default:
+                    vh.iconView.setImageResource(R.drawable.ic_logo);
+                    break;
+            }
+        } else {
+            switch (cursor.getString(ForecastFragment.COL_WEATHER_DESC)) {
+                case "Clear":
+                    vh.iconView.setImageResource(R.drawable.ic_clear);
+                    break;
+                case "Rain":
+                    vh.iconView.setImageResource(R.drawable.ic_rain);
+                    break;
+                case "Clouds":
+                    vh.iconView.setImageResource(R.drawable.ic_cloudy);
+                    break;
+                case "Fog":
+                    vh.iconView.setImageResource(R.drawable.ic_fog);
+                    break;
+                case "Light_clouds":
+                    vh.iconView.setImageResource(R.drawable.ic_light_clouds);
+                    break;
+                case "Light_rain":
+                    vh.iconView.setImageResource(R.drawable.ic_light_rain);
+                    break;
+                case "Snow":
+                    vh.iconView.setImageResource(R.drawable.ic_snow);
+                    break;
+                case "Storm":
+                    vh.iconView.setImageResource(R.drawable.ic_storm);
+                    break;
+                default:
+                    vh.iconView.setImageResource(R.drawable.ic_logo);
+                    break;
+            }
         }
 
 
