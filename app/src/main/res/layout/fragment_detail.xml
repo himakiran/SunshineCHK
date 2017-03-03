@@ -18,14 +18,16 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Today" />
+            android:text="Today"
+            android:textSize="@dimen/text_size" />
 
         <TextView
             android:id="@+id/detail_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="Jun 19" />
+            android:text="Jun 19"
+            android:textSize="@dimen/text_size" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,14 +45,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="20" />
+                    android:text="20"
+                    android:textSize="@dimen/text_size" />
 
                 <TextView
                     android:id="@+id/detail_temp_low"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="5dp"
-                    android:text="10" />
+                    android:text="10"
+                    android:textSize="@dimen/text_size" />
 
             </LinearLayout>
 
@@ -73,7 +77,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
-                    android:text="Clear" />
+                    android:text="Clear"
+                    android:textSize="@dimen/text_size" />
 
             </LinearLayout>
 
@@ -85,21 +90,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="81 %" />
+            android:text="81 %"
+            android:textSize="@dimen/text_size" />
 
         <TextView
             android:id="@+id/detail_wind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="2 km/h NW" />
+            android:text="2 km/h NW"
+            android:textSize="@dimen/text_size" />
 
         <TextView
             android:id="@+id/detail_pressure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
-            android:text="1017 hPa" />
+            android:text="1017 hPa"
+            android:textSize="@dimen/text_size" />
 
 
     </LinearLayout>

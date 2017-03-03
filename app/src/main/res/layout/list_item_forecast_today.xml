@@ -18,16 +18,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-
-            android:text="Tomorrow" />
+            android:text="Tomorrow"
+            android:textSize="@dimen/text_size" />
 
         <TextView
             android:id="@+id/list_item_high_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-
-            android:text="81" />
+            android:text="81"
+            android:textSize="@dimen/text_size" />
 
         <TextView
             android:id="@+id/list_item_low_textview"
@@ -35,8 +35,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-
-            android:text="68" />
+            android:text="68"
+            android:textSize="@dimen/text_size" />
 
     </LinearLayout>
 
@@ -60,7 +60,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_margin="5dp"
-            android:text="Clear" />
+            android:text="Clear"
+            android:textSize="@dimen/text_size" />
     </LinearLayout>
 
 </LinearLayout>

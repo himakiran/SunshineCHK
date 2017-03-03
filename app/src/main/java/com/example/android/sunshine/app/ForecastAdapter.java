@@ -97,7 +97,37 @@ public class ForecastAdapter extends CursorAdapter {
 
         ViewHolder vh = (ViewHolder) view.getTag();
 
-        vh.iconView.setImageResource(R.mipmap.ic_launcher);
+        switch (cursor.getString(ForecastFragment.COL_WEATHER_DESC)) {
+            case "Clear":
+                vh.iconView.setImageResource(R.drawable.art_clear);
+                break;
+            case "Rain":
+                vh.iconView.setImageResource(R.drawable.art_rain);
+                break;
+            case "Clouds":
+                vh.iconView.setImageResource(R.drawable.art_clouds);
+                break;
+            case "Fog":
+                vh.iconView.setImageResource(R.drawable.art_fog);
+                break;
+            case "Light_clouds":
+                vh.iconView.setImageResource(R.drawable.art_light_clouds);
+                break;
+            case "Light_rain":
+                vh.iconView.setImageResource(R.drawable.art_light_rain);
+                break;
+            case "Snow":
+                vh.iconView.setImageResource(R.drawable.art_snow);
+                break;
+            case "Storm":
+                vh.iconView.setImageResource(R.drawable.art_storm);
+                break;
+            default:
+                vh.iconView.setImageResource(R.drawable.ic_logo);
+                break;
+        }
+
+
 
         long dateInMillis = cursor.getLong(ForecastFragment.COL_WEATHER_DATE);
         vh.dateView.setText(Utility.getFriendlyDayString(context,dateInMillis));

@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.sunshine.app.data.WeatherContract;
@@ -131,6 +132,38 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
         String weatherDescription =
                 data.getString(COL_WEATHER_DESC);
+
+        ImageView iv = (ImageView) getView().findViewById(R.id.detail_icon);
+
+        switch (weatherDescription) {
+            case "Clear":
+                iv.setImageResource(R.drawable.art_clear);
+                break;
+            case "Rain":
+                iv.setImageResource(R.drawable.art_rain);
+                break;
+            case "Clouds":
+                iv.setImageResource(R.drawable.art_clouds);
+                break;
+            case "Fog":
+                iv.setImageResource(R.drawable.art_fog);
+                break;
+            case "Light_clouds":
+                iv.setImageResource(R.drawable.art_light_clouds);
+                break;
+            case "Light_rain":
+                iv.setImageResource(R.drawable.art_light_rain);
+                break;
+            case "Snow":
+                iv.setImageResource(R.drawable.art_snow);
+                break;
+            case "Storm":
+                iv.setImageResource(R.drawable.art_storm);
+                break;
+            default:
+                iv.setImageResource(R.drawable.ic_logo);
+                break;
+        }
 
         boolean isMetric = Utility.isMetric(getActivity());
 
