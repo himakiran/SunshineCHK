@@ -27,7 +27,6 @@ import android.widget.ListView;
 import com.example.android.sunshine.app.data.WeatherContract;
 
 import static com.example.android.sunshine.app.R.layout.fragment_main;
-import static com.example.android.sunshine.app.data.WeatherContract.WeatherEntry.CONTENT_URI;
 
 
 /**
@@ -217,6 +216,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private void updateWeather() {
         FetchWeatherTask fetch = new FetchWeatherTask(getActivity());
         String location = Utility.getPreferredLocation(getActivity());
+        Log.v("ForecastFragmtUpdtWthr", location);
         //fetch takes one parameter that is a string
         // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
 
@@ -261,10 +261,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             Corrected this line after advice by ashesh on 1:1 appointment. Now the app is displaying
             data on the main screen.
          */
-        //Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocationWithStartDate(
-        //locationSetting, System.currentTimeMillis());
+        Uri weatherForLocationUri = WeatherContract.WeatherEntry.buildWeatherLocation(
+                locationSetting);
 
-        Uri weatherForLocationUri = CONTENT_URI;
+        //Uri weatherForLocationUri = CONTENT_URI;
 
         return new CursorLoader(this.getContext(), weatherForLocationUri, FORECAST_COLUMNS, null, null, sortOrder);
 
