@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 
@@ -119,10 +120,12 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         if (location != null && !location.equals(mLocation)) {
             ForecastFragment ff = (ForecastFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
             if (null != ff) {
+                Log.v("MainActivityff-OnResume", location);
                 ff.onLocationChanged();
             }
             DetailFragment df = (DetailFragment) getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
             if (null != df) {
+                Log.v("MainActivitydf-OnResume", location);
                 df.onLocationChanged(location);
             }
             mLocation = location;
