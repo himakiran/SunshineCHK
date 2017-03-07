@@ -9,4 +9,6 @@
     <color name="backgrounda_color">#40e2ff</color>
     <color name="borderb_color">#296306</color>
     <color name="backgroundb_color">#fceb69</color>
+    <color name="grey">#cccccc</color>
+    <color name="sunshine_light_blue">#ff64c2f4</color>
 </resources>
