@@ -69,6 +69,7 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         Bundle arguments = getArguments();
         if (arguments != null) {
             mUri = arguments.getParcelable(DetailFragment.DETAIL_URI);
+            Log.v("DETAIL-FRAGMENT", mUri.toString());
         }
         return inflater.inflate(R.layout.fragment_detail, container, false);
     }
@@ -106,10 +107,11 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        Log.v(LOG_TAG, "In onCreateLoader");
+
         if (null != mUri) {
             // Now create and return a CursorLoader that will take care of
             // creating a Cursor for the data being displayed.
+            Log.v(LOG_TAG, "In onCreateLoader");
             return new CursorLoader(
                     getActivity(),
                     mUri,

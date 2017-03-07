@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 
+import com.example.android.sunshine.app.data.WeatherContract;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.appindexing.Thing;
@@ -30,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         mLocation = Utility.getPreferredLocation(this);
         //activity_main is dummy layout
         setContentView(R.layout.activity_main);
+        Uri contentUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(mLocation, System.currentTimeMillis());
 
         if (findViewById(R.id.weather_detail_container) != null) {
             // The detail container view will be present only in the large-screen layouts
@@ -39,9 +41,19 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
             // fragment transaction.
+            /*
+            The code below will ensure that the first time detail fragment is loaded it displays
+            the first uri of the forecast-fragment rather than the default values
+             */
+            Bundle args = new Bundle();
+            args.putParcelable(DetailFragment.DETAIL_URI, contentUri);
+
+            DetailFragment fragment = new DetailFragment();
+            fragment.setArguments(args);
+
             if (savedInstanceState == null) {
                 getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.weather_detail_container, new DetailFragment(), DETAILFRAGMENT_TAG)
+                        .add(R.id.weather_detail_container, fragment, DETAILFRAGMENT_TAG)
                         .commit();
             }
         } else {
