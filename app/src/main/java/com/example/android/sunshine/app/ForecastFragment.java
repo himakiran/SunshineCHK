@@ -67,6 +67,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public Uri geolocation;
     // mForecastAdapter has been made a global variable so that it can be accessed from within FetchWeatherTask
     private ForecastAdapter mForecastAdapter;
+    private boolean mUseTodayLayout;
+
+    private int mpos = ListView.INVALID_POSITION;
+    private ListView listview;
 
     public ForecastFragment() {
     }
@@ -83,7 +87,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     //to create the view
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                             final Bundle savedInstanceState) {
 
 
 
@@ -114,7 +118,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             the code below loads the fragment_main.xml layout which has the id listview_forecast
             and connects the adapter to it...
             */
-        ListView listview = (ListView) rootView.findViewById(R.id.list_view_forecast);
+        listview = (ListView) rootView.findViewById(R.id.list_view_forecast);
         listview.setAdapter(mForecastAdapter);
          /*
         The below code from the gist of the class to replace the toast in MainActivity.java has been
@@ -128,6 +132,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
                 // if it cannot seek to that position.
                 Cursor cursor = (Cursor) adapterView.getItemAtPosition(position);
                 Log.v("CHK-FORECASTFRAGMENT", cursor.getString(1));
+
+
                 if (cursor != null) {
                     String locationSetting = Utility.getPreferredLocation(getActivity());
                     ((Callback) getActivity()).onItemSelected(WeatherContract.WeatherEntry.buildWeatherLocationWithDate(
@@ -136,12 +142,33 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
 
                 }
+                // save the selected position.
+                mpos = position;
+
             }
         });
 
+        if (savedInstanceState != null && savedInstanceState.containsKey("select-pos")) {
+            // The listview probably hasn't even been populated yet.  Actually perform the
+            // swapout in onLoadFinished.
+            mpos = savedInstanceState.getInt("select-pos");
+        }
+
+        mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
 
         return rootView;
 
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // When tablets rotate, the currently selected list item needs to be saved.
+        // When no item is selected, mPosition will be set to Listview.INVALID_POSITION,
+        // so check for that before storing.
+        if (mpos != ListView.INVALID_POSITION) {
+            outState.putInt("select-pos", mpos);
+        }
+        super.onSaveInstanceState(outState);
     }
 
     /*
@@ -273,7 +300,14 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mForecastAdapter.swapCursor(data);
+        if (mpos != ListView.INVALID_POSITION) {
+
+            listview.smoothScrollToPosition(mpos);
+
+        }
+
     }
+
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
@@ -287,6 +321,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         getLoaderManager().restartLoader(FORECAST_LOADER, null, this);
     }
 
+    public void setUseTodayLayout(boolean useTodayLayout) {
+        mUseTodayLayout = useTodayLayout;
+        if (mForecastAdapter != null) {
+            mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
+        }
+    }
+
     /**
      * A callback interface that all activities containing this fragment must
      * implement. This mechanism allows activities to be notified of item
@@ -298,7 +339,6 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
          */
         void onItemSelected(Uri dateUri);
     }
-
 
 
 }
