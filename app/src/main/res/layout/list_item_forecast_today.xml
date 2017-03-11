@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/touch_selector"
+    android:background="@color/sunshine_blue"
     android:orientation="horizontal">
+    <!--android:background="@drawable/touch_selector"-->
+
+    <LinearLayout
+        android:layout_width="60dp"
+        android:layout_height="wrap_content"
+
+        android:background="@color/sunshine_blue"></LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-
+        android:layout_weight="7"
+        android:background="@color/sunshine_blue"
         android:orientation="vertical"
         >
 
@@ -17,52 +25,75 @@
             android:id="@+id/list_item_date_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:layout_margin="5dp"
+            android:fontFamily="sans-serif-condensed"
             android:text="Tomorrow"
-            android:textSize="@dimen/text_size" />
+            android:textColor="#FFFFFF"
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/list_item_high_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
+            android:fontFamily="sans-serif-light"
             android:text="81"
-            android:textSize="@dimen/text_size" />
+            android:textColor="#FFFFFF"
+            android:textSize="72sp" />
 
         <TextView
             android:id="@+id/list_item_low_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="left"
             android:layout_margin="5dp"
+            android:fontFamily="sans-serif-light"
             android:text="68"
-            android:textSize="@dimen/text_size" />
+            android:textColor="#FFFFFF"
+            android:textSize="36sp" />
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_weight="5"
 
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/list_item_icon"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:contentDescription="sunrise weather description image"
             android:src="@mipmap/ic_launcher" />
+
 
         <TextView
             android:id="@+id/list_item_forecast_textview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="5dp"
+            android:layout_margin="10dp"
+            android:fontFamily="sans-serif-condensed"
             android:text="Clear"
-            android:textSize="@dimen/text_size" />
+            android:textColor="#FFFFFF"
+            android:textSize="22sp" />
+
+        <com.example.android.sunshine.app.MyView
+            android:id="@+id/detail_other"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_gravity="center"
+            custom:circleColor="@color/circle_color"
+            custom:lineColor="@color/line_color"
+            custom:textBox1="ZIP : "
+            custom:textBox2="LAT : "
+            custom:textBox3="LONG : " />
+
     </LinearLayout>
 
 </LinearLayout>

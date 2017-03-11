@@ -13,4 +13,6 @@
     <color name="sunshine_light_blue">#ff64c2f4</color>
     <color name="sunshine_blue">#ff1ca8f4</color>
     <color name="sunshine_dark_blue">#0288D1</color>
+    <color name="circle_color">#ffff0000</color>
+    <color name="line_color">#ffffffff</color>
 </resources>

@@ -1,8 +1,11 @@
 package com.example.android.sunshine.app;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.database.Cursor;
+import android.os.Build;
 import android.support.v4.widget.CursorAdapter;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -92,6 +95,7 @@ public class ForecastAdapter extends CursorAdapter {
     /*
         This is where we fill-in the views with the contents of the cursor.
      */
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
 
@@ -172,6 +176,8 @@ public class ForecastAdapter extends CursorAdapter {
 
         String desc = cursor.getString(ForecastFragment.COL_WEATHER_DESC);
         vh.descriptionView.setText(desc);
+        // for accessibility
+        vh.iconView.setContentDescription(desc);
 
         double high = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
 
@@ -179,6 +185,22 @@ public class ForecastAdapter extends CursorAdapter {
 
         double low = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
         vh.lowTempView.setText(Utility.formatTemperature(context,low,isMetric));
+
+        String loc_zip = String.valueOf(cursor.getInt(ForecastFragment.COL_LOCATION_SETTING));
+
+        String loc_lat = String.valueOf(cursor.getFloat(ForecastFragment.COL_COORD_LAT));
+
+        String loc_long = String.valueOf(cursor.getFloat(ForecastFragment.COL_COORD_LONG));
+
+        try {
+            MyView v = vh.OtherValues;
+            v.setText(loc_zip, loc_lat, loc_long);
+        } catch (Exception e) {
+            Log.e("MyView-Exception", "error", e);
+        }
+
+
+
 
     }
 
@@ -194,6 +216,7 @@ public class ForecastAdapter extends CursorAdapter {
         public final TextView descriptionView;
         public final TextView highTempView;
         public final TextView lowTempView;
+        public final MyView OtherValues;
 
         public ViewHolder(View view) {
             iconView = (ImageView) view.findViewById(R.id.list_item_icon);
@@ -201,6 +224,7 @@ public class ForecastAdapter extends CursorAdapter {
             descriptionView = (TextView) view.findViewById(R.id.list_item_forecast_textview);
             highTempView = (TextView) view.findViewById(R.id.list_item_high_textview);
             lowTempView = (TextView) view.findViewById(R.id.list_item_low_textview);
+            OtherValues = (MyView) view.findViewById(R.id.detail_other);
         }
     }
 }

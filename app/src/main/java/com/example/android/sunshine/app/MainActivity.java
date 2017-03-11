@@ -31,7 +31,14 @@ public class MainActivity extends AppCompatActivity implements ForecastFragment.
         super.onCreate(savedInstanceState);
         mLocation = Utility.getPreferredLocation(this);
         //activity_main is dummy layout
+
         setContentView(R.layout.activity_main);
+        /*
+         Checking if tablet is in potrait mode. if in potrait mode then we will not use two pane mode
+         TO-DO
+                  */
+
+
         Uri contentUri = WeatherContract.WeatherEntry.buildWeatherLocationWithDate(mLocation, System.currentTimeMillis());
 
         if (findViewById(R.id.weather_detail_container) != null) {

@@ -4,7 +4,7 @@
     android:id="@+id/activity_detail"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="5dp"
+    android:padding="16dp"
     tools:context=".DetailActivity">
 
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -18,16 +18,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:fontFamily="sans-serif-condensed"
             android:text="Today"
-            android:textSize="@dimen/text_size" />
+            android:textSize="24sp" />
 
         <TextView
             android:id="@+id/detail_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="5dp"
+            android:fontFamily="sans-serif-light"
             android:text="Jun 19"
-            android:textSize="@dimen/text_size" />
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -44,17 +46,21 @@
                     android:id="@+id/detail_temp_high"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:layout_margin="5dp"
-                    android:text="def-20"
-                    android:textSize="@dimen/text_size" />
+                    android:fontFamily="sans-serif-condensed"
+                    android:text="20"
+                    android:textSize="96sp" />
 
                 <TextView
                     android:id="@+id/detail_temp_low"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="5dp"
-                    android:text="def-10"
-                    android:textSize="@dimen/text_size" />
+                    android:layout_gravity="center"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="sans-serif-light"
+                    android:text="10"
+                    android:textSize="48sp" />
 
             </LinearLayout>
 
@@ -66,9 +72,11 @@
 
                 <ImageView
                     android:id="@+id/detail_icon"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
                     android:layout_gravity="center_horizontal"
+                    android:layout_margin="5dp"
+                    android:contentDescription="Sunrise Logo"
                     android:src="@mipmap/ic_launcher" />
 
                 <TextView
@@ -77,8 +85,9 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_margin="5dp"
-                    android:text="def-Clear"
-                    android:textSize="@dimen/text_size" />
+                    android:fontFamily="sans-serif-light"
+                    android:text="Clear"
+                    android:textSize="22sp" />
 
             </LinearLayout>
 
@@ -89,25 +98,28 @@
             android:id="@+id/detail_humidity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
-            android:text="def-81 %"
-            android:textSize="@dimen/text_size" />
+
+            android:fontFamily="sans-serif-light"
+            android:text="81 %"
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/detail_wind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-light"
             android:text="def-2 km/h NW"
-            android:textSize="@dimen/text_size" />
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/detail_pressure"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="5dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-light"
             android:text="def-1017 hPa"
-            android:textSize="@dimen/text_size" />
+            android:textSize="22sp" />
 
 
     </LinearLayout>
