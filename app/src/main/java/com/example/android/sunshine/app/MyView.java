@@ -11,6 +11,8 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityManager;
 
 /**
  * Created by userhk on 11/03/17.
@@ -66,6 +68,14 @@ public class MyView extends View {
         mLinePaint.setStyle(Paint.Style.STROKE);
         mLinePaint.setColor(line_color);
         mLinePaint.setStrokeWidth(4f);
+
+        AccessibilityManager accessibilityManager =
+                (AccessibilityManager) context.getSystemService(
+                        Context.ACCESSIBILITY_SERVICE);
+        if (accessibilityManager.isEnabled()) {
+            sendAccessibilityEvent(
+                    AccessibilityEvent.TYPE_VIEW_TEXT_CHANGED);
+        }
 
         setOnMeasureCallback();
     }

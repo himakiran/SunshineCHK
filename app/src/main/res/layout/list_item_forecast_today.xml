@@ -88,6 +88,7 @@
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_gravity="center"
+            android:contentDescription="Shows the Zip Lat and Long"
             custom:circleColor="@color/circle_color"
             custom:lineColor="@color/line_color"
             custom:textBox1="ZIP : "
