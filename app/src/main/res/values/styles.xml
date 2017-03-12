@@ -27,8 +27,4 @@
     </style>
 
 
-    <style name="ForecastListStyle">
-        <!-- Here it's a stub.  In screens of sufficient width, this style includes modifications
-        for two-pane layout -->
-    </style>
 </resources>

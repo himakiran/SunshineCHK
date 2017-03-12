@@ -25,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.android.sunshine.app.data.WeatherContract;
+import com.example.android.sunshine.app.service.SunshineService;
 
 import static com.example.android.sunshine.app.R.layout.fragment_main;
 
@@ -241,14 +242,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     }
 
     private void updateWeather() {
-        FetchWeatherTask fetch = new FetchWeatherTask(getActivity());
+
         String location = Utility.getPreferredLocation(getActivity());
         Log.v("ForecastFragmtUpdtWthr", location);
         //fetch takes one parameter that is a string
         // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
 
         try {
-            fetch.execute(location);
+            Intent intent = new Intent(getActivity(), SunshineService.class);
+            intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,
+                    Utility.getPreferredLocation(getActivity()));
+            getActivity().startService(intent);
             //Log.v("CHK-ZIPCODE-FUNCTION", zipcode);
         } catch (Exception e) {
             Log.e("CHK-ZIPCODE-FUNCTION", "String not returned", e);

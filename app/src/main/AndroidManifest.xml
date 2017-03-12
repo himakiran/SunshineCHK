@@ -50,6 +50,7 @@
         <provider
             android:name=".data.WeatherProvider"
             android:authorities="com.example.android.sunshine.app" />
+        <service android:name=".service.SunshineService" />
     </application>
 
 </manifest>
