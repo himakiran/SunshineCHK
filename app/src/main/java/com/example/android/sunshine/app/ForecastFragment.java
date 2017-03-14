@@ -4,6 +4,9 @@ package com.example.android.sunshine.app;
  * Created by userhk on 07/11/16.
  */
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -72,6 +75,9 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
 
     private int mpos = ListView.INVALID_POSITION;
     private ListView listview;
+
+//    private AlarmManager alarmMgr;
+//    private PendingIntent alarmIntent;
 
     public ForecastFragment() {
     }
@@ -249,11 +255,37 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         // also as fetch executes the onPostExecute overridden function ensures that mForecastAdapter gets populated
 
         try {
-            Intent intent = new Intent(getActivity(), SunshineService.class);
-            intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,
-                    Utility.getPreferredLocation(getActivity()));
-            getActivity().startService(intent);
+
+//            Intent intent = new Intent(getActivity(), SunshineService.class);
+//            intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA,
+//                    Utility.getPreferredLocation(getActivity()));
+//            getActivity().startService(intent);
             //Log.v("CHK-ZIPCODE-FUNCTION", zipcode);
+//
+            /*
+            My solution
+             */
+//            alarmMgr = (AlarmManager) getContext().getSystemService(Context.ALARM_SERVICE);
+//            Intent intent = new Intent(getContext(), SunshineService.AlarmReceiver.class);
+//            intent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, Utility.getPreferredLocation(getActivity()));
+//            alarmIntent = PendingIntent.getBroadcast(getContext(), 0, intent, 0);
+//            alarmMgr.set(AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() +
+//                    300 * 1000, alarmIntent);
+            /*
+                Instr solution
+             */
+            Intent alarmIntent = new Intent(getActivity(), SunshineService.AlarmReceiver.class);
+            alarmIntent.putExtra(SunshineService.LOCATION_QUERY_EXTRA, Utility.getPreferredLocation(getActivity()));
+
+//Wrap in a pending intent which only fires once.
+            PendingIntent pi = PendingIntent.getBroadcast(getActivity(), 0, alarmIntent, PendingIntent.FLAG_ONE_SHOT);//getBroadcast(context, 0, i, 0);
+
+            AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
+
+//Set the AlarmManager to wake up the system.
+            am.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis() + 5000, pi);
+
+
         } catch (Exception e) {
             Log.e("CHK-ZIPCODE-FUNCTION", "String not returned", e);
         }
