@@ -247,8 +247,8 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     private void updateWeather() {
         Log.d("FF", "UpdtWthr starting");
 
-        SunshineSyncAdapter s = new SunshineSyncAdapter(getContext(), true);
-        s.syncImmediately(getContext());
+
+        SunshineSyncAdapter.syncImmediately(getActivity());
 
     }
 
