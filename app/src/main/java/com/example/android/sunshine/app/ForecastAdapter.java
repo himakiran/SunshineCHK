@@ -33,7 +33,7 @@ public class ForecastAdapter extends CursorAdapter {
      */
     private String formatHighLows(double high, double low) {
         boolean isMetric = Utility.isMetric(mContext);
-        String highLowStr = Utility.formatTemperature(mContext,high, isMetric) + "/" + Utility.formatTemperature(mContext,low, isMetric);
+        String highLowStr = Utility.formatTemperature(mContext, high) + "/" + Utility.formatTemperature(mContext, low);
         return highLowStr;
     }
 
@@ -181,10 +181,10 @@ public class ForecastAdapter extends CursorAdapter {
 
         double high = cursor.getDouble(ForecastFragment.COL_WEATHER_MAX_TEMP);
 
-        vh.highTempView.setText(Utility.formatTemperature(context,high,isMetric));
+        vh.highTempView.setText(Utility.formatTemperature(context, high));
 
         double low = cursor.getDouble(ForecastFragment.COL_WEATHER_MIN_TEMP);
-        vh.lowTempView.setText(Utility.formatTemperature(context,low,isMetric));
+        vh.lowTempView.setText(Utility.formatTemperature(context, low));
 
         String loc_zip = String.valueOf(cursor.getInt(ForecastFragment.COL_LOCATION_SETTING));
 
@@ -194,7 +194,9 @@ public class ForecastAdapter extends CursorAdapter {
 
         try {
             MyView v = vh.OtherValues;
-            v.setText(loc_zip, loc_lat, loc_long);
+            if (v != null) {
+                v.setText(loc_zip, loc_lat, loc_long);
+            }
         } catch (Exception e) {
             Log.e("MyView-Exception", "error", e);
         }

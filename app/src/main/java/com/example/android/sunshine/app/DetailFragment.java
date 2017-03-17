@@ -172,10 +172,10 @@ public class DetailFragment extends Fragment implements LoaderManager.LoaderCall
         boolean isMetric = Utility.isMetric(getActivity());
 
         String high = Utility.formatTemperature(getContext(),
-                data.getDouble(COL_WEATHER_MAX_TEMP), isMetric);
+                data.getDouble(COL_WEATHER_MAX_TEMP));
 
         String low = Utility.formatTemperature(getContext(),
-                data.getDouble(COL_WEATHER_MIN_TEMP), isMetric);
+                data.getDouble(COL_WEATHER_MIN_TEMP));
 
         String dateString = Utility.getFormattedMonthDay(getContext(),
                 data.getLong(COL_WEATHER_DATE));
