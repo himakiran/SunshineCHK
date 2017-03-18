@@ -1,0 +1,4 @@
+1.  From this commit onwards the app source code shall be tweaked to reflect and match the
+Advanced Android App Development starter code given at the link below
+
+    https://github.com/udacity/Advanced_Android_Development/tree/2.00_Integration_Points_and_Error_Cases
