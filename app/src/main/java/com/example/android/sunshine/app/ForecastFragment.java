@@ -63,13 +63,13 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
             WeatherContract.LocationEntry.COLUMN_COORD_LAT,
             WeatherContract.LocationEntry.COLUMN_COORD_LONG
     };
-    public double geoLat;
-    public double geoLong;
+
     public Uri geolocation;
+    public String geoLat;
+    public String geoLong;
     // mForecastAdapter has been made a global variable so that it can be accessed from within FetchWeatherTask
     private ForecastAdapter mForecastAdapter;
     private boolean mUseTodayLayout;
-
     private int mpos = ListView.INVALID_POSITION;
     private ListView listview;
 
@@ -210,10 +210,10 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     public boolean onOptionsItemSelected(MenuItem item) {
         //code to handle each menu item
         int id = item.getItemId();
-        if (id == R.id.action_refresh) {
-            updateWeather();
-            return true;
-        }
+//        if (id == R.id.action_refresh) {
+//            updateWeather();
+//            return true;
+//        }
         /*
         The code below calls the setting activity class
          */
@@ -228,14 +228,29 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         This is an example of implicit intent which helps view the location on google map
          */
         if (id == R.id.see_map) {
-            Intent intent = new Intent(Intent.ACTION_VIEW);
+            // Using the URI scheme for showing a location found on a map.  This super-handy
+            // intent can is detailed in the "Common Intents" page of Android's developer site:
+            // http://developer.android.com/guide/components/intents-common.html#Maps
+            if (null != mForecastAdapter) {
+                Cursor c = mForecastAdapter.getCursor();
+                if (null != c) {
+                    c.moveToPosition(0);
+                    Intent intent = new Intent(Intent.ACTION_VIEW);
+                    geoLat = c.getString(COL_COORD_LAT);
+                    geoLong = c.getString(COL_COORD_LONG);
+                    String geo = "geo:" + Double.valueOf(geoLat) + "," + Double.valueOf(geoLong);
+                    Uri geolocation = Uri.parse(geo);
+                    Log.v("CHK-GEO-URI", geo);
+                    //Log.v("CHK-GEO-URI", geo);
+                    //intent.setData takes an Uri and hence above Uri.parse on string is done
+                    intent.setData(geolocation);
+                    if (intent.resolveActivity(this.getActivity().getPackageManager()) != null) {
+                        startActivity(intent);
+                    } else {
+                        Log.d("Forecast-Fragment", "Couldn't call " + geolocation.toString() + ", no receiving apps installed!");
+                    }
+                }
 
-
-            //Log.v("CHK-GEO-URI", geo);
-            //intent.setData takes an Uri and hence above Uri.parse on string is done
-            intent.setData(geolocation);
-            if (intent.resolveActivity(this.getActivity().getPackageManager()) != null) {
-                startActivity(intent);
             }
 
 

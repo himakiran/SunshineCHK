@@ -63,6 +63,9 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
     private static final long DAY_IN_MILLIS = 1000 * 60 * 60 * 24;
     private static final int WEATHER_NOTIFICATION_ID = 3004;
     public final String LOG_TAG = SunshineSyncAdapter.class.getSimpleName();
+    public double cityLatitude;
+    public double cityLongitude;
+
 
 
     public SunshineSyncAdapter(Context context, boolean autoInitialize) {
@@ -293,8 +296,8 @@ public class SunshineSyncAdapter extends AbstractThreadedSyncAdapter {
             String cityName = cityJson.getString(OWM_CITY_NAME);
 
             JSONObject cityCoord = cityJson.getJSONObject(OWM_COORD);
-            double cityLatitude = cityCoord.getDouble(OWM_LATITUDE);
-            double cityLongitude = cityCoord.getDouble(OWM_LONGITUDE);
+            cityLatitude = cityCoord.getDouble(OWM_LATITUDE);
+            cityLongitude = cityCoord.getDouble(OWM_LONGITUDE);
 
             long locationId = addLocation(locationSetting, cityName, cityLatitude, cityLongitude);
 
